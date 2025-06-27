@@ -1,0 +1,420 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Initialize Project and UI Component Library",
+        "description": "Set up the mobile app project repository and define the UI component library as per the PRD.",
+        "details": "Create a new mobile app project using a modern framework (e.g., React Native, Flutter). Define and document the UI component library including navigation (bottom/top bars), cards (vendor, category, membership, promo), buttons (primary, secondary, icon, floating action), forms (text input, OTP input, dropdown, toggle), and modals (confirmation, filter, share, payment). Use the specified design system for colors, typography, spacing, and icons. Ensure Bengali font support and RTL compatibility.",
+        "testStrategy": "Verify project setup by running a basic app. Test each UI component in isolation for correct styling, accessibility, and responsiveness. Validate Bengali and RTL support.",
+        "priority": "high",
+        "dependencies": [],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Set Up Mobile App Project Repository",
+            "description": "Initialize a new mobile app project using the chosen modern framework (React Native or Flutter) and set up the project repository structure.",
+            "dependencies": [],
+            "details": "Create the project using commands like 'npx react-native init' for React Native or 'flutter create' for Flutter. Establish the directory structure including source, assets, and configuration files as per framework conventions.\n<info added on 2025-06-27T13:32:03.812Z>\nInstalled and configured NativeWind for styling instead of a custom design system. Installed dependencies including nativewind, react-native-reanimated, react-native-safe-area-context, and tailwindcss. Configured tailwind.config.js with a custom color palette, fonts, and spacing. Created babel.config.js with the NativeWind preset, metro.config.js with NativeWind integration, and nativewind-env.d.ts for TypeScript support. Added global.css import to app/_layout.tsx to enable global Tailwind styles. The project is now set up to develop components using Tailwind utility classes via NativeWind.\n</info added on 2025-06-27T13:32:03.812Z>",
+            "status": "done",
+            "testStrategy": "Verify project creation by running the default app on emulator or device and checking for successful build and launch."
+          },
+          {
+            "id": 2,
+            "title": "Configure Design System and Global Styles",
+            "description": "Define and implement the design system including colors, typography, spacing, icons, Bengali font support, and RTL compatibility.",
+            "dependencies": [
+              1
+            ],
+            "details": "Set up global style files or theme providers to enforce consistent design tokens across the app. Integrate Bengali fonts and ensure right-to-left layout support is enabled and tested.",
+            "status": "done",
+            "testStrategy": "Test UI rendering with Bengali text and verify correct RTL layout behavior on supported screens."
+          },
+          {
+            "id": 3,
+            "title": "Define and Document Navigation Components",
+            "description": "Create and document navigation UI components such as bottom and top navigation bars according to the PRD and design system.",
+            "dependencies": [
+              2
+            ],
+            "details": "Develop reusable navigation components with proper styling and behavior. Document usage guidelines and props for each navigation component.\n<info added on 2025-06-27T13:36:51.493Z>\nAdded Offers and Profile tabs to the main tab navigator in app/(tabs)/_layout.tsx, expanding the navigation structure. Created placeholder screens for Offers and Profile, styled using NativeWind utility classes to maintain consistency with the design system. Included detailed code comments documenting the navigation setup and component usage. With these additions, all navigation components are now implemented and ready for further development and UI refinement.\n</info added on 2025-06-27T13:36:51.493Z>",
+            "status": "done",
+            "testStrategy": "Validate navigation components by integrating them into sample screens and testing navigation flows on devices."
+          },
+          {
+            "id": 4,
+            "title": "Develop Core UI Components: Cards, Buttons, and Forms",
+            "description": "Implement and document UI components including cards (vendor, category, membership, promo), buttons (primary, secondary, icon, floating action), and form elements (text input, OTP input, dropdown, toggle).",
+            "dependencies": [
+              2
+            ],
+            "details": "Build each component as per design specifications ensuring accessibility, responsiveness, and theme compliance. Provide clear documentation for each component's API and usage.\n<info added on 2025-06-27T13:42:48.062Z>\nCreated core UI components—Button, Card, and Form—located in the components/ui/ directory. The Button component supports primary, secondary, and outline variants along with a loading state. The Card component includes optional shadow and padding features. The Form component provides consistent spacing for form fields. All components utilize NativeWind utility classes combined with clsx for conditional styling. The clsx package was installed to handle dynamic className management. Documentation for each component includes detailed API descriptions, usage examples, and accessibility considerations, following best practices to ensure clarity, up-to-date information, and ease of use. This documentation is integrated with the codebase using JSDoc comments and propTypes to enable automated generation and maintainability.\n</info added on 2025-06-27T13:42:48.062Z>",
+            "status": "done",
+            "testStrategy": "Perform component-level testing with various states and inputs, including RTL and Bengali text rendering."
+          },
+          {
+            "id": 5,
+            "title": "Implement and Document Modal Components",
+            "description": "Create modal components such as confirmation, filter, share, and payment modals, ensuring they follow the design system and support RTL and Bengali fonts.",
+            "dependencies": [
+              2
+            ],
+            "details": "Develop modal components with proper animations, accessibility features, and customizable content areas. Document their usage and integration patterns.\n<info added on 2025-06-27T13:43:57.981Z>\nCreated a reusable Modal component located at components/ui/Modal.tsx using NativeWind and React Native. This component supports the props: visible, onClose, title, and children, enabling flexible content rendering. It includes accessibility features such as proper focus management and screen reader support. The modal incorporates a slide animation for smooth appearance and dismissal transitions. Additionally, it features a styled close button for user-friendly interaction. This Modal component is fully documented and ready for integration and use across any screen or component within the project.\n</info added on 2025-06-27T13:43:57.981Z>",
+            "status": "done",
+            "testStrategy": "Test modals for correct display, interaction, and dismissal on different devices and orientations, including RTL mode."
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Implement Splash and Onboarding Screens",
+        "description": "Develop the splash screen and onboarding flow with animations and navigation.",
+        "details": "Implement splash screen with animated logo, loading indicator, and brand colors (2-3 seconds duration). Create onboarding slides (3-4 screens) with welcome, discount, digital loyalty card, and vendor preview. Add navigation (skip, next, start buttons) and progress indicators (dots/progress bar). Use slide animations for transitions.",
+        "testStrategy": "Test splash screen timing and animation. Verify onboarding navigation and progress indicators. Check for smooth transitions and correct content display.",
+        "priority": "medium",
+        "dependencies": [
+          1
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design and Implement Animated Splash Screen",
+            "description": "Create the splash screen featuring the animated logo, loading indicator, and brand colors with a duration of 2-3 seconds.",
+            "dependencies": [],
+            "details": "Develop the splash screen using vector drawable assets for the logo animation, ensure brand colors are applied consistently as background, and include a loading indicator animation. Limit animation duration to 2-3 seconds for optimal user experience. Follow platform-specific guidelines for splash screen dimensions and animation timing.\n<info added on 2025-06-27T13:50:06.155Z>\nCreated animated splash screen using React Native Reanimated with logo scale and opacity animations, implementing a smooth 2.5-second duration transition. Incorporated brand colors as background and added a loading indicator animation. Updated app navigation to include the splash screen route and ensured proper startup flow integration.\n</info added on 2025-06-27T13:50:06.155Z>",
+            "status": "done",
+            "testStrategy": "Test splash screen appearance and animation timing on multiple devices and screen sizes to ensure smooth animation and correct branding display."
+          },
+          {
+            "id": 2,
+            "title": "Create Onboarding Slide Content and Layout",
+            "description": "Develop the content and visual layout for 3-4 onboarding slides covering welcome message, discount offer, digital loyalty card, and vendor preview.",
+            "dependencies": [
+              1
+            ],
+            "details": "Design each onboarding slide with clear, concise messaging and visuals aligned with brand style. Prepare assets and text for welcome, discount, loyalty card, and vendor preview screens. Ensure accessibility and readability across devices.\n<info added on 2025-06-27T13:52:02.079Z>\nCreated onboarding screen with 4 slides: welcome, discount, digital loyalty card, and vendor preview. Implemented horizontal scroll with progress dots, navigation buttons (Skip/Next/Get Started), and proper routing to main app. Added onboarding route to navigation stack and updated splash screen to navigate to onboarding first. This onboarding flow ensures clear, concise messaging and visuals aligned with brand style, supports accessibility and readability across devices, and provides users with intuitive navigation and progress feedback throughout the onboarding process.\n</info added on 2025-06-27T13:52:02.079Z>",
+            "status": "done",
+            "testStrategy": "Verify content accuracy, visual consistency, and responsiveness of each slide on different screen sizes."
+          },
+          {
+            "id": 3,
+            "title": "Implement Navigation Controls and Progress Indicators",
+            "description": "Add navigation buttons (skip, next, start) and progress indicators (dots or progress bar) to the onboarding flow.",
+            "dependencies": [
+              2
+            ],
+            "details": "Develop interactive navigation controls allowing users to move forward, skip onboarding, or start using the app. Implement progress indicators that visually represent the current slide position. Ensure buttons are accessible and responsive.\n<info added on 2025-06-27T14:00:39.217Z>\nEnhanced onboarding navigation now includes interactive progress dots that are clickable, allowing users to directly navigate to any slide. A progress bar has been added to visually represent the user's advancement through the onboarding flow, complemented by a slide counter that displays the current slide number out of the total. Scroll behavior has been improved for smoother and more responsive transitions between slides. Additionally, smooth animations have been integrated to enhance visual feedback during user interactions, making the navigation controls more engaging and intuitive. These enhancements ensure buttons remain accessible and responsive while providing clear, interactive visual cues to reinforce user progress and encourage completion.\n</info added on 2025-06-27T14:00:39.217Z>",
+            "status": "done",
+            "testStrategy": "Test navigation flow for correct button functionality and progress indicator updates during slide transitions."
+          },
+          {
+            "id": 4,
+            "title": "Add Slide Transition Animations",
+            "description": "Implement smooth slide animations for transitions between onboarding screens.",
+            "dependencies": [
+              3
+            ],
+            "details": "Use slide animation techniques to transition between onboarding screens, enhancing user experience. Ensure animations are performant and consistent across devices. Choose animation styles that complement the app’s branding and do not hinder usability.\n<info added on 2025-06-27T14:05:14.206Z>\nSuccessfully implemented smooth slide transition animations using React Native Reanimated, incorporating fade, scale, and slide effects for content elements during slide changes. Resolved React Hook errors by relocating `useAnimatedStyle` calls outside of map functions. Implemented individual animated styles for each slide's icon and text, along with progress dots, utilizing proper interpolation and spring animations. Added scroll event handling to track scroll position and trigger animations based on scroll progress.\n</info added on 2025-06-27T14:05:14.206Z>",
+            "status": "done",
+            "testStrategy": "Test slide transitions for smoothness, timing, and absence of visual glitches on various devices."
+          },
+          {
+            "id": 5,
+            "title": "Integrate Splash Screen and Onboarding Flow with App Navigation",
+            "description": "Connect the splash screen and onboarding flow into the app’s navigation system to ensure proper sequence and state management.",
+            "dependencies": [
+              4
+            ],
+            "details": "Configure app navigation to display the splash screen on launch, then proceed to onboarding if the user is new or directly to the main app if onboarding is completed. Manage state persistence to avoid repeating onboarding unnecessarily.\n<info added on 2025-06-27T14:12:09.458Z>\nSplash screen now checks AsyncStorage for onboarding completion status and routes users accordingly: first-time users are directed to onboarding, while returning users proceed directly to the main app. AsyncStorage dependency has been added, and onboarding completion status is saved upon both skip and completion actions to prevent repeated onboarding on subsequent launches. Navigation logic ensures a seamless transition from splash to onboarding or main app based on user status.\n</info added on 2025-06-27T14:12:09.458Z>",
+            "status": "done",
+            "testStrategy": "Perform end-to-end testing of app launch sequence, verifying splash screen display, onboarding flow, navigation controls, and correct app entry after onboarding."
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Build Login/Registration and OTP Verification",
+        "description": "Develop login/registration and OTP verification screens with validation and social login.",
+        "details": "Create login/registration screen with phone/email input (validation), password input (show/hide toggle), login button, social login (Google, Facebook), forgot password link, sign up link, and error messages. Implement OTP verification screen with 4-6 digit input (auto-focus), resend button (countdown timer), verify button, and masked phone display.",
+        "testStrategy": "Test input validation, error messages, and social login integration. Verify OTP input, resend functionality, and countdown timer. Ensure secure handling of user credentials.",
+        "priority": "medium",
+        "dependencies": [
+          1
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design Login and Registration UI",
+            "description": "Create the login and registration screen layout including phone/email input with validation, password input with show/hide toggle, login button, social login options (Google, Facebook), forgot password link, sign up link, and error message display.",
+            "dependencies": [],
+            "details": "Focus on clear visual hierarchy, minimal input fields, and user-friendly design principles such as instant input validation, clickable labels, and password requirement visibility to ensure ease of use and trustworthiness.\n<info added on 2025-06-27T14:40:47.456Z>\nSuccessfully designed and implemented the login and registration UI screens with comprehensive functionality, including email/phone input, password input with show/hide toggle, login button with loading state, social login options (Google, Facebook), forgot password link, and sign up link. The registration screen includes additional fields for name, confirm password, terms acceptance checkbox, and proper validation. Implemented OTP verification screen with 6-digit input fields, auto-focus navigation, resend functionality with a 30-second countdown timer, and masked phone display. All screens utilize NativeWind styling with proper dark mode support, consistent design language, and smooth user experience. Input validation is integrated with instant feedback on fields such as email format, password strength, confirm password matching, and terms acceptance, ensuring user-friendly interaction and trustworthiness. User interaction logic includes clickable labels, password requirement visibility, and loading states for asynchronous actions to enhance usability and responsiveness.\n</info added on 2025-06-27T14:40:47.456Z>",
+            "status": "done",
+            "testStrategy": "Test UI responsiveness, input validation accuracy, toggle functionality for password visibility, and correct display of error messages and links."
+          },
+          {
+            "id": 2,
+            "title": "Implement Input Validation and User Interaction Logic",
+            "description": "Develop validation logic for phone/email inputs, password strength and format, and handle user interactions such as toggling password visibility and switching between login and sign-up screens.",
+            "dependencies": [
+              1
+            ],
+            "details": "Include real-time validation feedback, Caps Lock detection, and clear error messages to guide users effectively during input.\n<info added on 2025-06-27T14:46:56.147Z>\nSuccessfully implemented comprehensive input validation and user interaction logic across all authentication screens, enhancing usability and accessibility in line with best practices. \n\nLogin Screen improvements include real-time email/phone validation using regex, password minimum length enforcement, dynamic focus state management with border color changes, immediate error clearing on input changes, visual error icons and messages, and refined loading states with responsive button interactions.\n\nRegistration Screen enhancements feature thorough validation for all fields (name, email, password, confirm password), a password strength indicator with a color-coded progress bar, real-time feedback on password strength, terms and conditions validation, detailed error messaging, and improved user experience through auto-focus and efficient field management.\n\nOTP Verification Screen was optimized by reducing input digits from six to four for better user experience, implementing auto-focus between input fields, backspace navigation handling, real-time validation with visual feedback, a demo mode with a test code hint (1234), enhanced error handling, resend functionality, and improved visual design with better spacing and color schemes.\n\nKey features implemented across all screens include real-time validation with immediate feedback, visual error and success indicators, password strength visualization, auto-focus and keyboard navigation support, loading states with disabled button handling, comprehensive error messaging, and overall enhanced accessibility and user experience. These improvements align with recognized best practices such as indicating Caps Lock status, providing instant input validation, clear password requirements, and maintaining a simple, trustworthy authentication process.\n</info added on 2025-06-27T14:46:56.147Z>",
+            "status": "done",
+            "testStrategy": "Perform unit and integration tests on validation functions, simulate user input scenarios, and verify error message accuracy and timing."
+          },
+          {
+            "id": 3,
+            "title": "Integrate Social Login Functionality",
+            "description": "Add social login options for Google and Facebook to the login/registration screen, enabling one-click registration and login.",
+            "dependencies": [
+              1
+            ],
+            "details": "Ensure secure OAuth integration, handle authentication callbacks, and provide fallback options if social login fails.\n<info added on 2025-06-27T14:57:32.884Z>\nSuccessfully implemented social login integration with the following components:\n\n**Authentication Hook (useAuth.ts):**\n- Created comprehensive authentication hook with OAuth support\n- Implemented Google and Facebook OAuth configurations using expo-auth-session\n- Added user state management with AsyncStorage persistence\n- Included email authentication methods (login/register)\n- Added logout and user update functionality\n- Proper error handling and loading states\n\n**Login Screen Integration:**\n- Integrated useAuth hook for actual authentication\n- Connected social login buttons to OAuth flows\n- Added loading states and disabled states during authentication\n- Enhanced error handling with user-friendly alerts\n- Maintained all existing validation and UI features\n\n**Registration Screen Integration:**\n- Integrated useAuth hook for email registration\n- Connected social registration buttons to OAuth flows\n- Added proper loading states and disabled interactions\n- Enhanced error handling for registration failures\n- Maintained password strength indicators and validation\n\n**Key Features Implemented:**\n- OAuth 2.0 flow for Google and Facebook authentication\n- Secure token handling and user session management\n- Persistent user authentication across app sessions\n- Comprehensive error handling for network failures\n- Loading states and user feedback during authentication\n- Mock implementations ready for backend integration\n\n**Technical Implementation:**\n- Used expo-auth-session for OAuth flows\n- AsyncStorage for user data persistence\n- TypeScript interfaces for type safety\n- Proper error boundaries and fallback handling\n- Ready for production OAuth client IDs and secrets\n</info added on 2025-06-27T14:57:32.884Z>",
+            "status": "done",
+            "testStrategy": "Test social login flows on multiple devices and browsers, verify token handling and error management."
+          },
+          {
+            "id": 4,
+            "title": "Develop OTP Verification Screen",
+            "description": "Create the OTP verification screen with 4-6 digit input fields featuring auto-focus, a resend button with countdown timer, verify button, and masked phone number display.",
+            "dependencies": [
+              2
+            ],
+            "details": "Design for smooth user experience with automatic focus shift between input fields, clear countdown for resend, and secure display of masked phone number.\n<info added on 2025-06-27T15:05:21.709Z>\nSuccessfully enhanced the OTP verification screen with comprehensive security features and improved user experience:\n\n**OTP Hook (useOTP.ts):**\n- Created dedicated OTP management hook with security features\n- Implemented attempt tracking with persistent storage\n- Added account lockout functionality (5-minute lockout after 5 failed attempts)\n- Resend timer with 30-second cooldown\n- Comprehensive error handling and state management\n- AsyncStorage integration for persistence across app sessions\n\n**Enhanced OTP Screen:**\n- Integrated useOTP hook for secure verification\n- Added attempt counter with color-coded warnings\n- Implemented account lockout UI with countdown timer\n- Enhanced resend functionality with proper cooldown\n- Improved error handling and user feedback\n- Added security indicators and trust signals\n\n**Security Features Implemented:**\n- Attempt tracking with persistent storage\n- Progressive lockout system (5 attempts → 5-minute lockout)\n- Resend rate limiting (30-second cooldown)\n- Visual feedback for remaining attempts\n- Account lockout with countdown display\n- Secure OTP validation with proper error handling\n\n**User Experience Improvements:**\n- Real-time attempt counter with color coding\n- Clear lockout messages with countdown timer\n- Disabled interactions during lockout periods\n- Enhanced visual feedback for security states\n- Improved accessibility and error messaging\n- Security trust indicators and badges\n\n**Technical Implementation:**\n- AsyncStorage for persistent attempt tracking\n- Timer management for lockout and resend cooldowns\n- Proper state management with React hooks\n- TypeScript interfaces for type safety\n- Integration with existing authentication flow\n- App scheme configuration for OAuth redirects\n</info added on 2025-06-27T15:05:21.709Z>",
+            "status": "done",
+            "testStrategy": "Test input auto-focus behavior, countdown timer accuracy, resend button functionality, and correct masking of phone number."
+          },
+          {
+            "id": 5,
+            "title": "Implement OTP Verification Logic and Error Handling",
+            "description": "Implement backend integration for OTP verification, handle resend OTP requests with timer, and manage error messages for invalid or expired OTPs.",
+            "dependencies": [
+              4
+            ],
+            "details": "Ensure secure OTP validation, prevent abuse of resend functionality, and provide clear feedback for verification success or failure.",
+            "status": "done",
+            "testStrategy": "Conduct end-to-end testing of OTP sending, verification, resend limits, and error scenarios."
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Develop Package Selection and Card Generation",
+        "description": "Implement package selection screen and digital loyalty card generation.",
+        "details": "Create package selection screen with premium and affordable package cards (price, benefits, renewal, styling), select buttons, and comparison table. Generate digital loyalty card with card number, user name, membership type, expiration date, QR code, and card actions (share, download, renew). Use premium styling with gradients.",
+        "testStrategy": "Test package selection and comparison. Verify card generation, QR code display, and card actions. Check styling and responsiveness.",
+        "priority": "medium",
+        "dependencies": [
+          2,
+          3
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 5,
+        "title": "Implement Home Screen and Navigation",
+        "description": "Develop the home screen with widgets, category grid, and navigation.",
+        "details": "Build home screen with top bar (logo, notification, profile, menu), membership card widget (name, card number, type, expiration, quick access), points/balance widget (points, balance, progress bar), category grid (11 categories with icons), search bar, featured vendors (horizontal scroll), and promo banners (carousel). Implement bottom tab navigation (home, categories, search, card, profile).",
+        "testStrategy": "Test home screen layout, widgets, and navigation. Verify category grid, featured vendors, and promo banners. Check navigation between tabs.",
+        "priority": "high",
+        "dependencies": [
+          1,
+          2
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement Top Bar",
+            "description": "Develop the top bar with logo, notification, profile, and menu icons.",
+            "dependencies": [],
+            "details": "Top bar should be fixed at the top of the home screen and include interactive icons for navigation and user actions.\n<info added on 2025-06-27T14:16:35.678Z>\nSuccessfully implemented the top bar fixed at the top of the home screen featuring the Thank You BD logo aligned to the left and interactive icons aligned to the right, including a notification icon with a red badge indicator, profile icon, and menu icon. Styling was done using NativeWind with full support for dark mode, ensuring proper spacing and visual hierarchy for clarity and ease of use. The design follows best practices for top app bars by maintaining a clean layout that balances branding and user actions without overcrowding the space. The notification badge provides a clear visual cue for new alerts, enhancing user engagement and navigation efficiency.\n</info added on 2025-06-27T14:16:35.678Z>",
+            "status": "done",
+            "testStrategy": "Verify all icons are visible and functional, and that the top bar remains fixed during scrolling."
+          },
+          {
+            "id": 2,
+            "title": "Build Membership Card Widget",
+            "description": "Create a widget displaying user membership card details.",
+            "dependencies": [],
+            "details": "Widget should show name, card number, type, expiration, and provide quick access to card features.\n<info added on 2025-06-27T14:18:16.053Z>\nSuccessfully implemented the membership card widget featuring a visually appealing gradient background using expo-linear-gradient. The card displays the member name (John Doe), a masked card number, card type (GOLD), and expiration date (12/25) with a clear typography hierarchy using white text for optimal contrast against the gradient. Added a distinctive GOLD badge for visual emphasis and included three semi-transparent quick access buttons for QR code, card details, and settings, ensuring intuitive and accessible interaction. The design maintains balanced spacing and consistent visual hierarchy to enhance readability and user experience.\n</info added on 2025-06-27T14:18:16.053Z>",
+            "status": "done",
+            "testStrategy": "Check that all card details are displayed correctly and quick access buttons are responsive."
+          },
+          {
+            "id": 3,
+            "title": "Develop Points/Balance Widget",
+            "description": "Design and implement a widget for points, balance, and progress bar.",
+            "dependencies": [],
+            "details": "Widget should display current points, balance, and a visual progress bar indicating status.\n<info added on 2025-06-27T14:20:06.095Z>\nSuccessfully implemented the points and balance widget with comprehensive reward tracking. The widget displays current points (2,450), balance ($0.50), and a gradient progress bar showing 49% completion toward the Gold level (2,450 out of 5,000 points). It features quick action buttons for earning points and redeeming rewards. The design uses a clear visual hierarchy with large, prominent point numbers, a color-coded balance display, and distinct call-to-action buttons to enhance user engagement and clarity.\n</info added on 2025-06-27T14:20:06.095Z>",
+            "status": "done",
+            "testStrategy": "Ensure points, balance, and progress bar update dynamically and are visually clear."
+          },
+          {
+            "id": 4,
+            "title": "Create Category Grid and Featured Sections",
+            "description": "Implement the category grid and featured vendors/promo banners.",
+            "dependencies": [],
+            "details": "Category grid should display 11 categories with icons. Featured vendors should be a horizontal scroll, and promo banners should be a carousel.\n<info added on 2025-06-27T14:23:11.890Z>\nSuccessfully implemented the category grid displaying 11 categories: Restaurants, Coffee, Shopping, Beauty, Fitness, Entertainment, Health, Services, Transport, Education, and More, each with colorful icons and consistent styling. Added a search bar at the top with a search icon and placeholder text for user input. Developed a horizontal scrollable featured vendors section showcasing 5 vendors—Starbucks, McDonald's, Nike Store, Sephora, and Planet Fitness—each represented with emoji icons, ratings, and discount badges. Ensured proper spacing, rounded corners, and full support for dark mode throughout the UI components.\n</info added on 2025-06-27T14:23:11.890Z>",
+            "status": "done",
+            "testStrategy": "Test grid layout, horizontal scroll, and carousel functionality for smooth user interaction."
+          },
+          {
+            "id": 5,
+            "title": "Implement Bottom Tab Navigation",
+            "description": "Add bottom tab navigation for main app sections.",
+            "dependencies": [],
+            "details": "Bottom tabs should include: home, categories, search, card, and profile. Each tab should navigate to the respective screen.\n<info added on 2025-06-27T14:32:04.803Z>\nSuccessfully implemented the bottom tab navigation with five tabs as specified in the PRD: Home, Categories, Search, Card, and Profile. The tab layout was updated to use Ionicons for icons, supporting focused and unfocused states with proper styling. Active tabs use the primary color #667eea, while inactive tabs use #9CA3AF. Dark mode support was also integrated to ensure consistent appearance across themes. New screen files were created for the Search, Card, and Profile tabs, each containing appropriate content and functionality: the Search screen features a prominent search bar, the Card screen displays the digital loyalty card with quick actions, and the Profile screen shows user information along with account and app settings.\n</info added on 2025-06-27T14:32:04.803Z>",
+            "status": "done",
+            "testStrategy": "Verify each tab navigates correctly and highlights the active tab."
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "title": "Develop Category and Vendor Detail Screens",
+        "description": "Implement category detail and vendor detail screens with filtering and actions.",
+        "details": "Create category detail screen with header (name, back button), vendor list (grid/list toggle), vendor cards (logo, name, discount, distance, rating), filter options (sort by name, discount, distance; filter by discount range, rating), and search. Build vendor detail screen with header (logo, name, discount, favorite), service details (types, contact, hours), location (address, map, directions, call), actions (show card, website, share), and reviews (rating, count, add review, list).",
+        "testStrategy": "Test category and vendor detail screens for layout, filtering, and actions. Verify map integration, contact actions, and review functionality.",
+        "priority": "medium",
+        "dependencies": [
+          5
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design Category Detail Screen Layout",
+            "description": "Create a visually appealing layout for the category detail screen, including a header with name and back button, and placeholders for vendor list and filter options.",
+            "dependencies": [],
+            "details": "Use UI design patterns like grid or list views for the vendor list. Ensure the layout is responsive and user-friendly.",
+            "status": "done",
+            "testStrategy": "Conduct usability testing to ensure intuitive navigation."
+          },
+          {
+            "id": 2,
+            "title": "Implement Vendor List with Grid/List Toggle",
+            "description": "Develop the vendor list component with the ability to toggle between grid and list views, displaying vendor cards with logo, name, discount, distance, and rating.",
+            "dependencies": [
+              1
+            ],
+            "details": "Use a state management system to handle the view toggle. Ensure vendor cards are interactive and provide necessary information.",
+            "status": "done",
+            "testStrategy": "Test both grid and list views for proper rendering and interaction."
+          },
+          {
+            "id": 3,
+            "title": "Add Filtering and Search Functionality",
+            "description": "Integrate filter options (sort by name, discount, distance; filter by discount range, rating) and a search bar to enhance user experience.",
+            "dependencies": [
+              2
+            ],
+            "details": "Implement filtering using backend APIs or local data processing. Ensure search functionality is fast and accurate.",
+            "status": "pending",
+            "testStrategy": "Perform unit tests for filtering and search logic."
+          },
+          {
+            "id": 4,
+            "title": "Design and Implement Vendor Detail Screen",
+            "description": "Create the vendor detail screen with a header (logo, name, discount, favorite), service details, location information, actions, and reviews section.",
+            "dependencies": [
+              3
+            ],
+            "details": "Use UI components like maps and action buttons. Ensure all sections are well-organized and easy to navigate.",
+            "status": "pending",
+            "testStrategy": "Conduct integration testing to ensure all components work together seamlessly."
+          },
+          {
+            "id": 5,
+            "title": "Integrate Actions and Reviews on Vendor Detail Screen",
+            "description": "Implement actions (show card, website, share) and reviews (rating, count, add review, list) on the vendor detail screen.",
+            "dependencies": [
+              4
+            ],
+            "details": "Use APIs for fetching and posting reviews. Ensure actions are functional and reviews are properly displayed.",
+            "status": "pending",
+            "testStrategy": "Perform end-to-end testing for all actions and review functionality."
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "title": "Implement Points & Balance and Profile Screens",
+        "description": "Develop points & balance and profile screens with transaction history and account management.",
+        "details": "Create points & balance screen with points display (current, label, progress), balance display (current, label), transaction history (list with date, description, amount), and rewards catalog. Build profile screen with user info (picture, name, email/phone, edit), membership status (package, expiration, renewal), quick actions (view card, points, settings, help), and account actions (logout, delete).",
+        "testStrategy": "Test points & balance and profile screens for data display and actions. Verify transaction history and rewards catalog. Check account management features.",
+        "priority": "medium",
+        "dependencies": [
+          4,
+          5
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 8,
+        "title": "Implement Search and Settings Screens",
+        "description": "Develop search and settings screens with advanced filtering and app preferences.",
+        "details": "Create search screen with search bar, recent searches (chips), search results (vendor cards, category suggestions, no results state), and advanced filters. Build settings screen with account settings (personal info, password, notifications), app settings (language, theme, location), and privacy & security (data usage, policy, terms).",
+        "testStrategy": "Test search functionality, recent searches, and filtering. Verify settings screen for preference changes and privacy features.",
+        "priority": "medium",
+        "dependencies": [
+          5,
+          6
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 9,
+        "title": "Integrate Accessibility and Localization",
+        "description": "Implement accessibility features and localization for Bengali and RTL support.",
+        "details": "Add screen reader support (VoiceOver/TalkBack), ensure WCAG AA color contrast, set minimum touch targets (44pt), and support font scaling. Implement full Bengali language support, RTL text direction, Bangladeshi Taka currency, and DD/MM/YYYY date format.",
+        "testStrategy": "Test accessibility features with screen readers and contrast checkers. Verify Bengali and RTL support, currency, and date formatting.",
+        "priority": "medium",
+        "dependencies": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 10,
+        "title": "Implement Error States and Performance Optimization",
+        "description": "Develop error states and optimize app performance.",
+        "details": "Implement clear error states for no internet, no results, loading (skeleton screens), and validation errors. Optimize app launch (under 3 seconds), screen transitions (60fps), image loading (optimized logos), and offline messaging. Ensure smooth animations and interactions.",
+        "testStrategy": "Test error states and offline behavior. Measure app launch time, screen transitions, and image loading. Verify smooth animations and interactions.",
+        "priority": "medium",
+        "dependencies": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "status": "pending",
+        "subtasks": []
+      }
+    ],
+    "metadata": {
+      "created": "2025-06-27T12:51:01.737Z",
+      "updated": "2025-06-27T15:36:02.003Z",
+      "description": "Tasks for master context"
+    }
+  }
+}

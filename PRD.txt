@@ -1,0 +1,314 @@
+# Thank You BD Discount Program - UI-Only PRD
+
+## Overview
+This PRD focuses exclusively on the user interface and user experience requirements for the Thank You BD mobile app. The app provides discounts across 11 vendor categories in Bangladesh with a digital loyalty card system.
+
+## UI Screens & Components
+
+### 1. Splash Screen
+- **Logo**: Thank You BD branding with animated logo
+- **Loading Indicator**: Spinner or progress bar
+- **Background**: Brand colors or gradient
+- **Duration**: 2-3 seconds maximum
+
+### 2. Onboarding Flow (3-4 Slides)
+- **Slide 1**: Welcome with app logo and tagline
+- **Slide 2**: "Get 5% to 50% discounts" with vendor icons
+- **Slide 3**: "Digital loyalty card" with card mockup
+- **Slide 4**: "100+ vendors" with category grid preview
+- **Navigation**: Skip button, Next button, Start button
+- **Progress Indicator**: Dots or progress bar
+
+### 3. Login/Registration Screen
+- **Phone/Email Input**: Text field with validation
+- **Password Input**: Secure text field with show/hide toggle
+- **Login Button**: Primary action button
+- **Social Login**: Google and Facebook buttons
+- **Forgot Password**: Link below password field
+- **Sign Up Link**: For new users
+- **Error Messages**: Red text for validation errors
+
+### 4. OTP Verification Screen
+- **OTP Input**: 4-6 digit code input with auto-focus
+- **Resend Button**: Countdown timer (30 seconds)
+- **Verify Button**: Primary action
+- **Phone Display**: Shows masked phone number
+
+### 5. Package Selection Screen
+- **Premium Package Card**:
+  - Price: 2000 Tk for 14 months
+  - Benefits: All vendors, all items
+  - Renewal: 199 Tk/month after 1 year
+  - Visual: Gold/bronze styling
+- **Affordable Package Card**:
+  - Price: 199 Tk for 2 months
+  - Benefits: 1 vendor, per item
+  - Renewal: 199 Tk/month
+  - Visual: Silver/blue styling
+- **Select Button**: For each package
+- **Comparison Table**: Side-by-side benefits
+
+### 6. Home Screen
+- **Top Bar**:
+  - Logo on left
+  - Notification bell icon
+  - User profile icon
+  - Hamburger menu
+- **Membership Card Widget**:
+  - User name and card number
+  - Membership type (VIP/Affordable)
+  - Expiration countdown
+  - Quick access to full card
+- **Points/Balance Widget**:
+  - Current points (large number)
+  - Current balance (large number)
+  - Progress bar to next reward
+- **Category Grid** (11 categories):
+  - Grocery (shopping cart icon)
+  - Health (medical cross icon)
+  - Mobile Phone (phone icon)
+  - Tourist Hotel (hotel icon)
+  - Transport (bus icon)
+  - Food & Sweets (food icon)
+  - Online Shops (shopping bag icon)
+  - Fashion & Footwear (clothing icon)
+  - Furniture (chair icon)
+  - Electronics (device icon)
+  - Automobiles & Motorcycles (car icon)
+- **Search Bar**: At top with filter icon
+- **Featured Vendors**: Horizontal scrollable cards
+- **Promo Banners**: Carousel at bottom
+
+### 7. Category Detail Screen
+- **Header**: Category name and back button
+- **Vendor List**: Grid or list view toggle
+- **Vendor Cards**:
+  - Vendor logo (circular/square)
+  - Vendor name
+  - Discount badge (e.g., "15% OFF")
+  - Distance indicator
+  - Rating stars (if available)
+- **Filter Options**:
+  - Sort by: Name, Discount, Distance
+  - Filter by: Discount range, Rating
+- **Search**: Within category vendors
+
+### 8. Vendor Detail Screen
+- **Header Section**:
+  - Vendor logo (large)
+  - Vendor name
+  - Discount badge (prominent)
+  - Favorite/bookmark button
+- **Service Details**:
+  - Service types (e.g., "Test & Admission", "Regular Price")
+  - Contact information
+  - Operating hours
+- **Location Section**:
+  - Address text
+  - Map preview (small)
+  - "Get Directions" button
+  - "Call" button
+- **Actions Row**:
+  - "Show Card" button (primary)
+  - "Go to Website" button
+  - "Share" button
+- **Reviews Section**:
+  - Average rating
+  - Review count
+  - "Add Review" button
+  - Review list (if available)
+
+### 9. Digital Loyalty Card Screen
+- **Card Design**:
+  - Card number: 331037 (example)
+  - User name: "Rifat" (example)
+  - Membership type: VIP/Affordable
+  - Expiration date
+  - QR code (large, scannable)
+  - "Just take card get 5% to 50% discount" text
+- **Card Actions**:
+  - "Share Card" button
+  - "Download" button
+  - "Renew Membership" button
+- **Card Styling**: Premium look with gradients
+
+### 10. Points & Balance Screen
+- **Points Display**:
+  - Current points: 30 (large number)
+  - Points label
+  - Progress to next reward
+- **Balance Display**:
+  - Current balance: 16 (large number)
+  - Balance label
+- **Transaction History**:
+  - List of earned/spent points
+  - Date and description
+  - Points amount (+/-)
+- **Rewards Catalog**: Available rewards to redeem
+
+### 11. Profile Screen
+- **User Info Section**:
+  - Profile picture (circular)
+  - User name
+  - Email/phone
+  - Edit button
+- **Membership Status**:
+  - Current package
+  - Expiration date
+  - Renewal options
+- **Quick Actions**:
+  - View Card
+  - Points & Balance
+  - Settings
+  - Help & Support
+- **Account Actions**:
+  - Logout button
+  - Delete account (danger zone)
+
+### 12. Search Screen
+- **Search Bar**: Prominent at top
+- **Recent Searches**: Quick access chips
+- **Search Results**:
+  - Vendor cards with discount badges
+  - Category suggestions
+  - "No results" state
+- **Filters**: Advanced filtering options
+
+### 13. Settings Screen
+- **Account Settings**:
+  - Personal information
+  - Password change
+  - Notification preferences
+- **App Settings**:
+  - Language selection (Bengali/English)
+  - Theme (Light/Dark)
+  - Location permissions
+- **Privacy & Security**:
+  - Data usage
+  - Privacy policy
+  - Terms of service
+
+## UI Component Library
+
+### Navigation
+- **Bottom Tab Bar**: 5 main sections
+  - Home (house icon)
+  - Categories (grid icon)
+  - Search (magnifying glass)
+  - Card (credit card icon)
+  - Profile (user icon)
+- **Top Navigation**: Back buttons, titles, action buttons
+
+### Cards
+- **Vendor Card**: Logo, name, discount, distance
+- **Category Card**: Icon, name, vendor count
+- **Membership Card**: Digital card design
+- **Promo Card**: Banner with image and text
+
+### Buttons
+- **Primary Button**: Brand color, rounded corners
+- **Secondary Button**: Outlined style
+- **Icon Button**: Circular with icon only
+- **Floating Action Button**: For primary actions
+
+### Forms
+- **Text Input**: Rounded borders, validation states
+- **OTP Input**: Individual digit boxes
+- **Dropdown**: For package selection
+- **Toggle Switch**: For settings
+
+### Modals
+- **Confirmation Dialog**: For important actions
+- **Filter Modal**: For search filters
+- **Share Modal**: For sharing content
+- **Payment Modal**: For renewals
+
+## Design System
+
+### Colors
+- **Primary**: Brand blue (#007AFF)
+- **Secondary**: Brand green (#34C759)
+- **Accent**: Gold for VIP (#FFD700)
+- **Background**: Light gray (#F2F2F7)
+- **Text**: Dark gray (#1C1C1E)
+- **Error**: Red (#FF3B30)
+- **Success**: Green (#34C759)
+
+### Typography
+- **Headings**: Bold, 18-24pt
+- **Body Text**: Regular, 16pt
+- **Captions**: Light, 12-14pt
+- **Button Text**: Medium, 16pt
+- **Bengali Support**: Compatible fonts
+
+### Spacing
+- **Small**: 8px
+- **Medium**: 16px
+- **Large**: 24px
+- **Extra Large**: 32px
+
+### Icons
+- **Category Icons**: 24x24pt, outlined style
+- **Action Icons**: 20x20pt, filled style
+- **Navigation Icons**: 24x24pt, consistent style
+
+### Animations
+- **Screen Transitions**: Slide animations
+- **Button Press**: Scale down effect
+- **Loading**: Smooth spinners
+- **Card Interactions**: Subtle shadows
+
+## User Experience Requirements
+
+### Accessibility
+- **Screen Reader**: VoiceOver/TalkBack support
+- **Color Contrast**: WCAG AA compliance
+- **Touch Targets**: Minimum 44pt
+- **Font Scaling**: Support system preferences
+
+### Performance
+- **App Launch**: Under 3 seconds
+- **Screen Transitions**: 60fps smooth
+- **Image Loading**: Optimized vendor logos
+- **Offline States**: Clear messaging
+
+### Localization
+- **Bengali Language**: Full interface support
+- **RTL Support**: For Bengali text
+- **Currency**: Bangladeshi Taka (৳)
+- **Date Format**: DD/MM/YYYY
+
+### Error States
+- **No Internet**: Clear offline message
+- **No Results**: Helpful empty state
+- **Loading**: Skeleton screens
+- **Error Messages**: User-friendly text
+
+## User Flows
+
+### New User Journey
+1. Splash Screen (2-3 seconds)
+2. Onboarding Slides (3-4 screens)
+3. Registration (phone/email)
+4. OTP Verification
+5. Package Selection
+6. Card Generation
+7. Home Screen
+
+### Vendor Discovery
+1. Home Screen → Category Selection
+2. Category Screen → Vendor List
+3. Vendor Detail → Show Card
+4. QR Code Scan → Discount Applied
+
+### Membership Management
+1. Profile → Membership Status
+2. Renewal Options → Payment
+3. Payment Confirmation → Updated Status
+
+## Success Metrics
+- **User Engagement**: Time spent in app
+- **Conversion**: Package selection rate
+- **Retention**: Daily/weekly active users
+- **Usability**: Task completion rate
+- **Accessibility**: Screen reader usage 
