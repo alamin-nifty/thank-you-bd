@@ -3,8 +3,11 @@ import { useEffect } from "react";
 
 export default function Index() {
   useEffect(() => {
-    // Redirect to splash screen on app start
-    router.replace("/splash");
+    // Wait for navigation to be ready before redirecting
+    const timeout = setTimeout(() => {
+      router.replace("/splash");
+    }, 0);
+    return () => clearTimeout(timeout);
   }, []);
 
   return null;

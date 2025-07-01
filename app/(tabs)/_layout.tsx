@@ -3,8 +3,6 @@ import { Tabs } from "expo-router";
 import React from "react";
 import { Platform } from "react-native";
 
-import { HapticTab } from "@/components/HapticTab";
-import TabBarBackground from "@/components/ui/TabBarBackground";
 import { useColorScheme } from "@/hooks/useColorScheme";
 
 export default function TabLayout() {
@@ -16,8 +14,6 @@ export default function TabLayout() {
         tabBarActiveTintColor: "#667eea",
         tabBarInactiveTintColor: "#9CA3AF",
         headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
         tabBarStyle: {
           backgroundColor: colorScheme === "dark" ? "#1F2937" : "#FFFFFF",
           borderTopColor: colorScheme === "dark" ? "#374151" : "#E5E7EB",
@@ -68,12 +64,12 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="card"
+        name="offers"
         options={{
-          title: "Card",
+          title: "Offers",
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
-              name={focused ? "card" : "card-outline"}
+              name={focused ? "pricetags" : "pricetags-outline"}
               size={24}
               color={color}
             />

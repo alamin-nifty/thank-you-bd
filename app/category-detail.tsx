@@ -1,7 +1,14 @@
 import { Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import {
+  Modal,
+  Pressable,
+  ScrollView,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 // Bangladeshi brands data
@@ -498,9 +505,208 @@ export default function CategoryDetailScreen() {
   const insets = useSafeAreaInsets();
   const { category } = useLocalSearchParams<{ category: string }>();
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showSearch, setShowSearch] = useState(false);
+  const [showFilterModal, setShowFilterModal] = useState(false);
+  const [sortBy, setSortBy] = useState<
+    "name" | "discount" | "distance" | "rating"
+  >("name");
+  const [minRating, setMinRating] = useState(0);
+  const [maxDiscount, setMaxDiscount] = useState(100);
 
   const vendors =
     bangladeshiBrands[category as keyof typeof bangladeshiBrands] || [];
+
+  // Filter and sort vendors
+  const filteredVendors = vendors
+    .filter((vendor) => {
+      const matchesSearch = vendor.name
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+      const matchesRating = vendor.rating >= minRating;
+      const discountValue = parseInt(vendor.discount.replace("% off", ""));
+      const matchesDiscount = discountValue <= maxDiscount;
+      return matchesSearch && matchesRating && matchesDiscount;
+    })
+    .sort((a, b) => {
+      switch (sortBy) {
+        case "name":
+          return a.name.localeCompare(b.name);
+        case "discount":
+          const discountA = parseInt(a.discount.replace("% off", ""));
+          const discountB = parseInt(b.discount.replace("% off", ""));
+          return discountB - discountA; // Higher discount first
+        case "distance":
+          const distanceA = parseFloat(a.distance.replace(" km", ""));
+          const distanceB = parseFloat(b.distance.replace(" km", ""));
+          return distanceA - distanceB; // Closer first
+        case "rating":
+          return b.rating - a.rating; // Higher rating first
+        default:
+          return 0;
+      }
+    });
+
+  const FilterModal = () => (
+    <Modal
+      visible={showFilterModal}
+      animationType="slide"
+      transparent={true}
+      onRequestClose={() => setShowFilterModal(false)}
+    >
+      <View className="flex-1 bg-black bg-opacity-50 justify-end">
+        <View className="bg-white dark:bg-gray-800 rounded-t-3xl p-6 max-h-[80%]">
+          <View className="flex-row items-center justify-between mb-6">
+            <Text className="text-xl font-bold text-gray-900 dark:text-white">
+              Filter & Sort
+            </Text>
+            <Pressable onPress={() => setShowFilterModal(false)}>
+              <Ionicons name="close" size={24} color="#6B7280" />
+            </Pressable>
+          </View>
+
+          <ScrollView showsVerticalScrollIndicator={false}>
+            {/* Sort Options */}
+            <View className="mb-6">
+              <Text className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                Sort By
+              </Text>
+              <View className="space-y-2">
+                {[
+                  { key: "name", label: "Name (A-Z)" },
+                  { key: "discount", label: "Highest Discount" },
+                  { key: "distance", label: "Nearest First" },
+                  { key: "rating", label: "Highest Rating" },
+                ].map((option) => (
+                  <Pressable
+                    key={option.key}
+                    className={`flex-row items-center p-3 rounded-xl ${
+                      sortBy === option.key
+                        ? "bg-primary-100 dark:bg-primary-900"
+                        : "bg-gray-100 dark:bg-gray-700"
+                    }`}
+                    onPress={() => setSortBy(option.key as any)}
+                  >
+                    <Ionicons
+                      name={
+                        sortBy === option.key
+                          ? "checkmark-circle"
+                          : "ellipse-outline"
+                      }
+                      size={20}
+                      color={sortBy === option.key ? "#667eea" : "#6B7280"}
+                    />
+                    <Text
+                      className={`ml-3 text-base ${
+                        sortBy === option.key
+                          ? "text-primary-600 dark:text-primary-400 font-semibold"
+                          : "text-gray-700 dark:text-gray-300"
+                      }`}
+                    >
+                      {option.label}
+                    </Text>
+                  </Pressable>
+                ))}
+              </View>
+            </View>
+
+            {/* Rating Filter */}
+            <View className="mb-6">
+              <Text className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                Minimum Rating
+              </Text>
+              <View className="flex-row items-center space-x-2">
+                {[0, 3, 3.5, 4, 4.5].map((rating) => (
+                  <Pressable
+                    key={rating}
+                    className={`px-4 py-2 rounded-full ${
+                      minRating === rating
+                        ? "bg-primary-100 dark:bg-primary-900"
+                        : "bg-gray-100 dark:bg-gray-700"
+                    }`}
+                    onPress={() => setMinRating(rating)}
+                  >
+                    <Text
+                      className={`text-sm ${
+                        minRating === rating
+                          ? "text-primary-600 dark:text-primary-400 font-semibold"
+                          : "text-gray-700 dark:text-gray-300"
+                      }`}
+                    >
+                      {rating === 0 ? "Any" : `${rating}+`}
+                    </Text>
+                  </Pressable>
+                ))}
+              </View>
+            </View>
+
+            {/* Discount Filter */}
+            <View className="mb-6">
+              <Text className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                Maximum Discount
+              </Text>
+              <View className="flex-row items-center space-x-2">
+                {[100, 25, 20, 15, 10].map((discount) => (
+                  <Pressable
+                    key={discount}
+                    className={`px-4 py-2 rounded-full ${
+                      maxDiscount === discount
+                        ? "bg-primary-100 dark:bg-primary-900"
+                        : "bg-gray-100 dark:bg-gray-700"
+                    }`}
+                    onPress={() => setMaxDiscount(discount)}
+                  >
+                    <Text
+                      className={`text-sm ${
+                        maxDiscount === discount
+                          ? "text-primary-600 dark:text-primary-400 font-semibold"
+                          : "text-gray-700 dark:text-gray-300"
+                      }`}
+                    >
+                      {discount === 100 ? "Any" : `${discount}%+`}
+                    </Text>
+                  </Pressable>
+                ))}
+              </View>
+            </View>
+
+            {/* Results Count */}
+            <View className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 mb-4">
+              <Text className="text-center text-gray-600 dark:text-gray-400">
+                {filteredVendors.length} of {vendors.length} vendors match your
+                filters
+              </Text>
+            </View>
+
+            {/* Action Buttons */}
+            <View className="flex-row space-x-3">
+              <Pressable
+                className="flex-1 bg-gray-200 dark:bg-gray-600 rounded-xl py-3"
+                onPress={() => {
+                  setSortBy("name");
+                  setMinRating(0);
+                  setMaxDiscount(100);
+                  setSearchQuery("");
+                }}
+              >
+                <Text className="text-center text-gray-700 dark:text-gray-300 font-semibold">
+                  Reset
+                </Text>
+              </Pressable>
+              <Pressable
+                className="flex-1 bg-primary-600 dark:bg-primary-500 rounded-xl py-3"
+                onPress={() => setShowFilterModal(false)}
+              >
+                <Text className="text-center text-white font-semibold">
+                  Apply
+                </Text>
+              </Pressable>
+            </View>
+          </ScrollView>
+        </View>
+      </View>
+    </Modal>
+  );
 
   return (
     <View className="flex-1 bg-gray-50 dark:bg-gray-900">
@@ -520,14 +726,43 @@ export default function CategoryDetailScreen() {
           </View>
 
           <View className="flex-row items-center space-x-3">
-            <Pressable className="p-2">
-              <Ionicons name="search-outline" size={24} color="#6B7280" />
+            <Pressable
+              className="p-2"
+              onPress={() => setShowSearch(!showSearch)}
+            >
+              <Ionicons
+                name={showSearch ? "close" : "search-outline"}
+                size={24}
+                color="#6B7280"
+              />
             </Pressable>
-            <Pressable className="p-2">
+            <Pressable className="p-2" onPress={() => setShowFilterModal(true)}>
               <Ionicons name="filter-outline" size={24} color="#6B7280" />
             </Pressable>
           </View>
         </View>
+
+        {/* Search Bar */}
+        {showSearch && (
+          <View className="mt-4">
+            <View className="flex-row items-center bg-gray-100 dark:bg-gray-700 rounded-xl px-4 py-3">
+              <Ionicons name="search" size={20} color="#6B7280" />
+              <TextInput
+                className="flex-1 ml-3 text-gray-900 dark:text-white text-base"
+                placeholder="Search vendors..."
+                placeholderTextColor="#6B7280"
+                value={searchQuery}
+                onChangeText={setSearchQuery}
+                autoFocus
+              />
+              {searchQuery.length > 0 && (
+                <Pressable onPress={() => setSearchQuery("")}>
+                  <Ionicons name="close-circle" size={20} color="#6B7280" />
+                </Pressable>
+              )}
+            </View>
+          </View>
+        )}
       </View>
 
       {/* Content */}
@@ -543,7 +778,7 @@ export default function CategoryDetailScreen() {
         <View className="bg-white dark:bg-gray-800 rounded-2xl p-6 mb-6 shadow-sm">
           <View className="flex-row items-center justify-between mb-4">
             <Text className="text-lg font-bold text-gray-900 dark:text-white">
-              {vendors.length} Vendors Available
+              {filteredVendors.length} Vendors Available
             </Text>
             <View className="flex-row items-center space-x-2">
               <Pressable
@@ -572,129 +807,195 @@ export default function CategoryDetailScreen() {
           <Text className="text-gray-600 dark:text-gray-400 text-sm">
             Discover amazing deals from top {category} vendors in your area
           </Text>
+
+          {/* Active Filters Display */}
+          {(searchQuery || minRating > 0 || maxDiscount < 100) && (
+            <View className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+              <Text className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                Active Filters:
+              </Text>
+              <View className="flex-row flex-wrap gap-2">
+                {searchQuery && (
+                  <View className="bg-primary-100 dark:bg-primary-900 rounded-full px-3 py-1">
+                    <Text className="text-primary-700 dark:text-primary-300 text-xs">
+                      Search: &ldquo;{searchQuery}&rdquo;
+                    </Text>
+                  </View>
+                )}
+                {minRating > 0 && (
+                  <View className="bg-primary-100 dark:bg-primary-900 rounded-full px-3 py-1">
+                    <Text className="text-primary-700 dark:text-primary-300 text-xs">
+                      Rating: {minRating}+
+                    </Text>
+                  </View>
+                )}
+                {maxDiscount < 100 && (
+                  <View className="bg-primary-100 dark:bg-primary-900 rounded-full px-3 py-1">
+                    <Text className="text-primary-700 dark:text-primary-300 text-xs">
+                      Discount: {maxDiscount}%+
+                    </Text>
+                  </View>
+                )}
+              </View>
+            </View>
+          )}
         </View>
 
         {/* Vendors Grid/List */}
-        {viewMode === "grid" ? (
-          <View className="flex-row flex-wrap justify-between">
-            {vendors.map((vendor) => (
-              <Pressable
-                key={vendor.id}
-                className="w-[48%] bg-white dark:bg-gray-800 rounded-2xl p-4 mb-4 shadow-sm"
-                onPress={() =>
-                  router.push({
-                    pathname: "/vendor-detail",
-                    params: { vendorId: vendor.id.toString() },
-                  })
-                }
-              >
-                {/* Vendor Logo */}
-                <View className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-xl items-center justify-center mb-3 mx-auto">
-                  <Text className="text-2xl">{vendor.logo}</Text>
-                </View>
-
-                {/* Vendor Info */}
-                <View className="items-center">
-                  <Text className="text-gray-900 dark:text-white font-semibold text-sm text-center mb-1">
-                    {vendor.name}
-                  </Text>
-
-                  {(vendor as any).location && (
-                    <Text className="text-gray-500 dark:text-gray-400 text-xs text-center mb-2">
-                      {(vendor as any).location}
-                    </Text>
-                  )}
-
-                  {/* Rating */}
-                  <View className="flex-row items-center mb-2">
-                    <Ionicons name="star" size={12} color="#FBBF24" />
-                    <Text className="text-xs text-gray-600 dark:text-gray-400 ml-1">
-                      {vendor.rating}
-                    </Text>
-                  </View>
-
-                  {/* Discount */}
-                  <View className="bg-green-100 dark:bg-green-900 rounded-full px-3 py-1 mb-2">
-                    <Text className="text-green-700 dark:text-green-300 text-xs font-bold">
-                      {vendor.discount}
-                    </Text>
-                  </View>
-
-                  {/* Distance */}
-                  <Text className="text-gray-500 dark:text-gray-400 text-xs">
-                    {vendor.distance}
-                  </Text>
-                </View>
-              </Pressable>
-            ))}
-          </View>
-        ) : (
-          <View className="space-y-4">
-            {vendors.map((vendor) => (
-              <Pressable
-                key={vendor.id}
-                className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm"
-                onPress={() =>
-                  router.push({
-                    pathname: "/vendor-detail",
-                    params: { vendorId: vendor.id.toString() },
-                  })
-                }
-              >
-                <View className="flex-row items-center">
+        {filteredVendors.length > 0 ? (
+          viewMode === "grid" ? (
+            <View className="flex-row flex-wrap justify-between">
+              {filteredVendors.map((vendor) => (
+                <Pressable
+                  key={vendor.id}
+                  className="w-[48%] bg-white dark:bg-gray-800 rounded-2xl p-4 mb-4 shadow-sm"
+                  onPress={() =>
+                    router.push({
+                      pathname: "/vendor-detail",
+                      params: { vendorId: vendor.id.toString() },
+                    })
+                  }
+                >
                   {/* Vendor Logo */}
-                  <View className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-xl items-center justify-center mr-4">
+                  <View className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-xl items-center justify-center mb-3 mx-auto">
                     <Text className="text-2xl">{vendor.logo}</Text>
                   </View>
 
                   {/* Vendor Info */}
-                  <View className="flex-1">
-                    <View className="flex-row items-center justify-between mb-2">
-                      <Text className="text-gray-900 dark:text-white font-semibold text-base">
-                        {vendor.name}
-                      </Text>
-                      <View className="bg-green-100 dark:bg-green-900 rounded-full px-3 py-1">
-                        <Text className="text-green-700 dark:text-green-300 text-xs font-bold">
-                          {vendor.discount}
-                        </Text>
-                      </View>
-                    </View>
+                  <View className="items-center">
+                    <Text className="text-gray-900 dark:text-white font-semibold text-sm text-center mb-1">
+                      {vendor.name}
+                    </Text>
 
                     {(vendor as any).location && (
-                      <Text className="text-gray-500 dark:text-gray-400 text-sm mb-2">
+                      <Text className="text-gray-500 dark:text-gray-400 text-xs text-center mb-2">
                         {(vendor as any).location}
                       </Text>
                     )}
 
-                    <View className="flex-row items-center justify-between">
-                      <View className="flex-row items-center">
-                        <Ionicons name="star" size={14} color="#FBBF24" />
-                        <Text className="text-sm text-gray-600 dark:text-gray-400 ml-1">
-                          {vendor.rating}
-                        </Text>
-                      </View>
-                      <Text className="text-gray-500 dark:text-gray-400 text-sm">
-                        {vendor.distance}
+                    {/* Rating */}
+                    <View className="flex-row items-center mb-2">
+                      <Ionicons name="star" size={12} color="#FBBF24" />
+                      <Text className="text-xs text-gray-600 dark:text-gray-400 ml-1">
+                        {vendor.rating}
                       </Text>
                     </View>
-                  </View>
 
-                  <Ionicons name="chevron-forward" size={20} color="#6B7280" />
-                </View>
+                    {/* Discount */}
+                    <View className="bg-green-100 dark:bg-green-900 rounded-full px-3 py-1 mb-2">
+                      <Text className="text-green-700 dark:text-green-300 text-xs font-bold">
+                        {vendor.discount}
+                      </Text>
+                    </View>
+
+                    {/* Distance */}
+                    <Text className="text-gray-500 dark:text-gray-400 text-xs">
+                      {vendor.distance}
+                    </Text>
+                  </View>
+                </Pressable>
+              ))}
+            </View>
+          ) : (
+            <View className="space-y-4">
+              {filteredVendors.map((vendor) => (
+                <Pressable
+                  key={vendor.id}
+                  className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm"
+                  onPress={() =>
+                    router.push({
+                      pathname: "/vendor-detail",
+                      params: { vendorId: vendor.id.toString() },
+                    })
+                  }
+                >
+                  <View className="flex-row items-center">
+                    {/* Vendor Logo */}
+                    <View className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-xl items-center justify-center mr-4">
+                      <Text className="text-2xl">{vendor.logo}</Text>
+                    </View>
+
+                    {/* Vendor Info */}
+                    <View className="flex-1">
+                      <View className="flex-row items-center justify-between mb-2">
+                        <Text className="text-gray-900 dark:text-white font-semibold text-base">
+                          {vendor.name}
+                        </Text>
+                        <View className="bg-green-100 dark:bg-green-900 rounded-full px-3 py-1">
+                          <Text className="text-green-700 dark:text-green-300 text-xs font-bold">
+                            {vendor.discount}
+                          </Text>
+                        </View>
+                      </View>
+
+                      {(vendor as any).location && (
+                        <Text className="text-gray-500 dark:text-gray-400 text-sm mb-2">
+                          {(vendor as any).location}
+                        </Text>
+                      )}
+
+                      <View className="flex-row items-center justify-between">
+                        <View className="flex-row items-center">
+                          <Ionicons name="star" size={14} color="#FBBF24" />
+                          <Text className="text-sm text-gray-600 dark:text-gray-400 ml-1">
+                            {vendor.rating}
+                          </Text>
+                        </View>
+                        <Text className="text-gray-500 dark:text-gray-400 text-sm">
+                          {vendor.distance}
+                        </Text>
+                      </View>
+                    </View>
+
+                    <Ionicons
+                      name="chevron-forward"
+                      size={20}
+                      color="#6B7280"
+                    />
+                  </View>
+                </Pressable>
+              ))}
+            </View>
+          )
+        ) : (
+          <View className="bg-white dark:bg-gray-800 rounded-2xl p-8 mb-6 shadow-sm">
+            <View className="items-center">
+              <Ionicons name="search-outline" size={48} color="#9CA3AF" />
+              <Text className="text-lg font-semibold text-gray-700 dark:text-gray-300 mt-4 mb-2">
+                No vendors found
+              </Text>
+              <Text className="text-gray-500 dark:text-gray-400 text-center">
+                Try adjusting your search or filters to find more vendors
+              </Text>
+              <Pressable
+                className="mt-4 bg-primary-600 dark:bg-primary-500 rounded-xl px-6 py-3"
+                onPress={() => {
+                  setSearchQuery("");
+                  setMinRating(0);
+                  setMaxDiscount(100);
+                  setSortBy("name");
+                }}
+              >
+                <Text className="text-white font-semibold">Clear Filters</Text>
               </Pressable>
-            ))}
+            </View>
           </View>
         )}
 
         {/* Load More */}
-        <View className="bg-white dark:bg-gray-800 rounded-2xl p-6 mb-6 shadow-sm">
-          <Pressable className="items-center">
-            <Text className="text-primary-600 dark:text-primary-400 font-semibold">
-              Load More Vendors
-            </Text>
-          </Pressable>
-        </View>
+        {filteredVendors.length > 0 && (
+          <View className="bg-white dark:bg-gray-800 rounded-2xl p-6 mb-6 shadow-sm">
+            <Pressable className="items-center">
+              <Text className="text-primary-600 dark:text-primary-400 font-semibold">
+                Load More Vendors
+              </Text>
+            </Pressable>
+          </View>
+        )}
       </ScrollView>
+
+      {/* Filter Modal */}
+      <FilterModal />
     </View>
   );
 }

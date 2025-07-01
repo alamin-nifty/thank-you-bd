@@ -1,0 +1,54 @@
+{
+  "common": {
+    "appName": "Thank You BD",
+    "language": "Language",
+    "switchToLanguage": "Switch to {{language}}"
+  },
+  "home": {
+    "welcome": "Welcome to Thank You BD",
+    "featuredOffers": "Featured Offers",
+    "viewAll": "View All",
+    "categories": "Categories"
+  },
+  "categories": {
+    "grocery": "Grocery",
+    "electronics": "Electronics",
+    "fashion": "Fashion",
+    "restaurants": "Restaurants",
+    "beauty": "Beauty",
+    "home": "Home",
+    "health": "Health",
+    "sports": "Sports",
+    "books": "Books",
+    "automotive": "Automotive",
+    "more": "More"
+  },
+  "card": {
+    "membership": "Membership Card",
+    "memberName": "Member Name",
+    "cardNumber": "Card Number",
+    "showYourCard": "Show Your Card"
+  },
+  "points": {
+    "yourPoints": "Your Points",
+    "earnMore": "Earn More",
+    "balance": "Balance",
+    "totalEarned": "Total Earned"
+  },
+  "accessibility": {
+    "homeScreen": "Home screen with featured offers and categories",
+    "appLogo": "Thank You BD app logo",
+    "membershipCard": "Membership card with points and balance",
+    "membershipCardHint": "Double tap to view your digital card",
+    "viewCardButton": "View your digital card",
+    "earnMoreButton": "Earn more points",
+    "pointsBalanceWidget": "Points and balance information",
+    "categoryCard": "{{title}} category",
+    "categoryCardHint": "Double tap to view {{title}} offers",
+    "categoryIcon": "{{category}} category icon",
+    "featuredVendorsList": "List of featured vendors and offers",
+    "vendorCard": "{{title}} vendor card",
+    "vendorCardHint": "Double tap to view {{title}} offers",
+    "viewAllVendorsButton": "View all vendors"
+  }
+}

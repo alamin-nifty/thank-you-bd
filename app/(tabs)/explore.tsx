@@ -107,7 +107,7 @@ export default function ExploreScreen() {
         </View>
 
         {/* Categories Grid */}
-        <View className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm">
+        <View className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm mb-4">
           <Text className="text-lg font-bold text-gray-900 dark:text-white mb-4">
             All Categories
           </Text>

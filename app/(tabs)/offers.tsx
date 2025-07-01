@@ -10,7 +10,7 @@ const offers = [
     category: "Coffee",
     discount: "20%",
     validUntil: "Dec 31, 2024",
-    image: "☕",
+    icon: <Ionicons name="cafe-outline" size={32} color="#a16207" />, // Coffee
     isNew: true,
   },
   {
@@ -20,7 +20,7 @@ const offers = [
     category: "Fitness",
     discount: "Free Month",
     validUntil: "Jan 15, 2025",
-    image: "💪",
+    icon: <Ionicons name="barbell-outline" size={32} color="#16a34a" />, // Fitness
     isNew: false,
   },
   {
@@ -30,7 +30,7 @@ const offers = [
     category: "Beauty",
     discount: "30%",
     validUntil: "Dec 25, 2024",
-    image: "💄",
+    icon: <Ionicons name="rose-outline" size={32} color="#be185d" />, // Beauty
     isNew: true,
   },
   {
@@ -40,7 +40,7 @@ const offers = [
     category: "Restaurants",
     discount: "15%",
     validUntil: "Jan 10, 2025",
-    image: "🍔",
+    icon: <Ionicons name="fast-food-outline" size={32} color="#ea580c" />, // Food
     isNew: false,
   },
   {
@@ -50,7 +50,7 @@ const offers = [
     category: "Shopping",
     discount: "25%",
     validUntil: "Jan 20, 2025",
-    image: "👟",
+    icon: <Ionicons name="shirt-outline" size={32} color="#2563eb" />, // Shopping
     isNew: true,
   },
 ];
@@ -75,12 +75,12 @@ export default function OffersScreen() {
         className="flex-1 px-4 pt-6"
         contentContainerStyle={{
           paddingBottom: 100, // Extra padding for tab bar
-          paddingTop: 8,
+          paddingTop: 16, // More space above
         }}
         showsVerticalScrollIndicator={false}
       >
         {/* Search Bar */}
-        <View className="bg-white dark:bg-gray-800 rounded-2xl p-4 mb-6 shadow-sm">
+        <View className="bg-white dark:bg-gray-800 rounded-2xl p-4 mb-8 shadow-sm">
           <View className="flex-row items-center bg-gray-100 dark:bg-gray-700 rounded-xl px-4 py-3">
             <Ionicons name="search-outline" size={20} color="#6B7280" />
             <Text className="flex-1 ml-3 text-gray-500 dark:text-gray-400">
@@ -90,7 +90,7 @@ export default function OffersScreen() {
         </View>
 
         {/* Filter Tabs */}
-        <View className="bg-white dark:bg-gray-800 rounded-2xl p-4 mb-6 shadow-sm">
+        <View className="bg-white dark:bg-gray-800 rounded-2xl p-4 mb-8 shadow-sm">
           <View className="flex-row space-x-2">
             <Pressable className="bg-primary-600 rounded-full px-4 py-2">
               <Text className="text-white text-sm font-medium">All</Text>
@@ -114,16 +114,16 @@ export default function OffersScreen() {
         </View>
 
         {/* Offers List */}
-        <View className="space-y-4">
+        <View className="space-y-6 gap-y-3">
           {offers.map((offer) => (
             <Pressable
               key={offer.id}
-              className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm"
+              className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm"
             >
-              <View className="flex-row items-start">
-                {/* Offer Image */}
-                <View className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-xl items-center justify-center mr-4">
-                  <Text className="text-2xl">{offer.image}</Text>
+              <View className="flex-row items-center">
+                {/* Offer Icon */}
+                <View className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-xl items-center justify-center mr-5">
+                  {offer.icon}
                 </View>
 
                 {/* Offer Details */}
@@ -169,7 +169,7 @@ export default function OffersScreen() {
         </View>
 
         {/* Load More */}
-        <View className="bg-white dark:bg-gray-800 rounded-2xl p-6 mt-6 shadow-sm">
+        <View className="bg-white dark:bg-gray-800 rounded-2xl p-6 mt-8 shadow-sm">
           <Pressable className="items-center">
             <Text className="text-primary-600 dark:text-primary-400 font-semibold">
               Load More Offers

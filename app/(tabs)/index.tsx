@@ -1,29 +1,103 @@
 import { Ionicons } from "@expo/vector-icons";
+import * as Haptics from "expo-haptics";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
-import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import React, { useRef } from "react";
+import {
+  Animated,
+  Pressable,
+  ScrollView,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import {
+  AccessibilityRoles,
+  useAccessibility,
+} from "../../constants/Accessibility";
+import {
+  FontScalingStyles,
+  useRTLAndFontScaling,
+} from "../../constants/RTLSupport";
+import { TouchTargetConfigs } from "../../constants/TouchTargets";
 
 const categories = [
-  { id: 1, name: "Restaurants", icon: "restaurant-outline", color: "#FF6B6B" },
-  { id: 2, name: "Coffee", icon: "cafe-outline", color: "#4ECDC4" },
-  { id: 3, name: "Shopping", icon: "bag-outline", color: "#45B7D1" },
-  { id: 4, name: "Beauty", icon: "cut-outline", color: "#96CEB4" },
-  { id: 5, name: "Fitness", icon: "fitness-outline", color: "#FFEAA7" },
+  {
+    id: 1,
+    name: "Grocery",
+    key: "grocery",
+    icon: "basket-outline" as const,
+    color: "#FF6B6B",
+  },
+  {
+    id: 2,
+    name: "Electronics",
+    key: "electronics",
+    icon: "phone-portrait-outline" as const,
+    color: "#4ECDC4",
+  },
+  {
+    id: 3,
+    name: "Fashion",
+    key: "fashion",
+    icon: "shirt-outline" as const,
+    color: "#45B7D1",
+  },
+  {
+    id: 4,
+    name: "Restaurants",
+    key: "restaurants",
+    icon: "restaurant-outline" as const,
+    color: "#96CEB4",
+  },
+  {
+    id: 5,
+    name: "Beauty",
+    key: "beauty",
+    icon: "cut-outline" as const,
+    color: "#FFEAA7",
+  },
   {
     id: 6,
-    name: "Entertainment",
-    icon: "game-controller-outline",
+    name: "Home",
+    key: "home",
+    icon: "home-outline" as const,
     color: "#DDA0DD",
   },
-  { id: 7, name: "Health", icon: "medical-outline", color: "#98D8C8" },
-  { id: 8, name: "Services", icon: "construct-outline", color: "#F7DC6F" },
-  { id: 9, name: "Transport", icon: "car-outline", color: "#BB8FCE" },
-  { id: 10, name: "Education", icon: "school-outline", color: "#85C1E9" },
+  {
+    id: 7,
+    name: "Health",
+    key: "health",
+    icon: "medical-outline" as const,
+    color: "#98D8C8",
+  },
+  {
+    id: 8,
+    name: "Sports",
+    key: "sports",
+    icon: "fitness-outline" as const,
+    color: "#F7DC6F",
+  },
+  {
+    id: 9,
+    name: "Books",
+    key: "books",
+    icon: "library-outline" as const,
+    color: "#BB8FCE",
+  },
+  {
+    id: 10,
+    name: "Automotive",
+    key: "automotive",
+    icon: "car-outline" as const,
+    color: "#85C1E9",
+  },
   {
     id: 11,
     name: "More",
-    icon: "ellipsis-horizontal-outline",
+    key: "more",
+    icon: "ellipsis-horizontal-outline" as const,
     color: "#AEB6BF",
   },
 ];
@@ -31,48 +105,68 @@ const categories = [
 const featuredVendors = [
   {
     id: 1,
-    name: "Starbucks",
-    category: "Coffee",
+    name: "Shwapno",
+    category: "Grocery",
     rating: 4.5,
-    discount: "20% off",
-    image: "☕",
-  },
-  {
-    id: 2,
-    name: "McDonald's",
-    category: "Restaurants",
-    rating: 4.2,
     discount: "15% off",
-    image: "🍔",
+    image: "🛒",
+    color: "#FF6B6B",
+    distance: "0.5 km",
   },
   {
-    id: 3,
-    name: "Nike Store",
-    category: "Shopping",
+    id: 15,
+    name: "Samsung",
+    category: "Electronics",
+    rating: 4.2,
+    discount: "12% off",
+    image: "📱",
+    color: "#4ECDC4",
+    distance: "1.2 km",
+  },
+  {
+    id: 35,
+    name: "Hotel Sea Uttora",
+    category: "Tourist Hotels",
     rating: 4.7,
-    discount: "25% off",
-    image: "👟",
+    discount: "15% off",
+    image: "🏨",
+    color: "#45B7D1",
+    distance: "5.2 km",
   },
   {
     id: 4,
-    name: "Sephora",
-    category: "Beauty",
+    name: "Aarong",
+    category: "Fashion",
     rating: 4.4,
-    discount: "30% off",
-    image: "💄",
+    discount: "20% off",
+    image: "👗",
+    color: "#96CEB4",
+    distance: "1.8 km",
   },
   {
     id: 5,
-    name: "Planet Fitness",
-    category: "Fitness",
+    name: "Khaas Food",
+    category: "Restaurants",
     rating: 4.3,
-    discount: "Free month",
-    image: "💪",
+    discount: "10% off",
+    image: "🍽️",
+    color: "#FFEAA7",
+    distance: "2.5 km",
   },
 ];
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
+  const accessibility = useAccessibility();
+  const {
+    isRTL,
+    textAlign,
+    getFlexDirection,
+    styles: rtlStyles,
+  } = useRTLAndFontScaling();
+
+  // Animation for profile icon
+  const profileScale = useRef(new Animated.Value(1)).current;
 
   const handleCategoryPress = (categoryName: string) => {
     router.push({
@@ -81,244 +175,528 @@ export default function HomeScreen() {
     });
   };
 
+  const handleVendorPress = (vendorName: string) => {
+    // Find the vendor in the featuredVendors array
+    const vendor = featuredVendors.find((v) => v.name === vendorName);
+    const vendorId = vendor ? vendor.id.toString() : "1";
+
+    router.push({
+      pathname: "/vendor-detail",
+      params: { vendorId },
+    });
+  };
+
+  const handleProfilePress = () => {
+    Animated.sequence([
+      Animated.timing(profileScale, {
+        toValue: 0.85,
+        duration: 80,
+        useNativeDriver: true,
+      }),
+      Animated.timing(profileScale, {
+        toValue: 1,
+        duration: 80,
+        useNativeDriver: true,
+      }),
+    ]).start();
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    router.push("/profile");
+  };
+
   return (
-    <View className="flex-1 bg-gray-50 dark:bg-gray-900">
-      {/* Top Bar */}
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: "#F2F2F7",
+        ...rtlStyles.layout.auto,
+      }}
+      accessible={true}
+      accessibilityLabel="Home screen with featured offers and categories"
+      accessibilityRole={AccessibilityRoles.TEXT}
+    >
+      {/* Header */}
       <View
-        className="bg-white dark:bg-gray-800 px-4 pb-4 border-b border-gray-200 dark:border-gray-700"
-        style={{ paddingTop: insets.top + 12 }}
+        style={{
+          backgroundColor: "#FFFFFF",
+          paddingTop: insets.top + 10,
+          paddingBottom: 20,
+          paddingHorizontal: 20,
+          borderBottomWidth: 1,
+          borderBottomColor: "#E5E5E5",
+          ...rtlStyles.layout.auto,
+        }}
       >
-        <View className="flex-row items-center justify-between">
-          {/* Logo */}
-          <View className="flex-row items-center">
-            <View className="w-8 h-8 bg-primary-600 rounded-lg items-center justify-center mr-2">
-              <Text className="text-white font-bold text-sm">TY</Text>
+        <View
+          style={{
+            flexDirection: getFlexDirection("row"),
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <View
+            style={{
+              flexDirection: getFlexDirection("row"),
+              alignItems: "center",
+            }}
+          >
+            <View
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: 20,
+                backgroundColor: "#007AFF",
+                justifyContent: "center",
+                alignItems: "center",
+                marginRight: 12,
+              }}
+              accessible={true}
+              accessibilityLabel="Thank You BD app logo"
+              accessibilityRole={AccessibilityRoles.IMAGE}
+            >
+              <Text
+                style={{
+                  color: "#FFFFFF",
+                  fontWeight: "bold",
+                  ...FontScalingStyles.text.lg(),
+                }}
+              >
+                TY
+              </Text>
             </View>
-            <Text className="text-lg font-bold text-gray-900 dark:text-white">
-              Thank You BD
-            </Text>
+            <View>
+              <Text
+                style={{
+                  fontWeight: "bold",
+                  color: "#1A1A1A",
+                  ...FontScalingStyles.text.xl(),
+                  ...rtlStyles.text.auto,
+                }}
+              >
+                Thank You BD
+              </Text>
+              <Text
+                style={{
+                  color: "#687076",
+                  ...FontScalingStyles.text.sm(),
+                  ...rtlStyles.text.auto,
+                }}
+              >
+                Discount Program
+              </Text>
+            </View>
           </View>
 
-          {/* Right Icons */}
-          <View className="flex-row items-center space-x-4">
-            {/* Notification Icon */}
-            <Pressable className="relative">
+          <View
+            style={{
+              flexDirection: getFlexDirection("row"),
+              alignItems: "center",
+            }}
+          >
+            <Pressable
+              style={[
+                TouchTargetConfigs.button.icon,
+                {
+                  marginRight: 12,
+                  backgroundColor: "#F2F2F7",
+                  borderRadius: 22,
+                },
+              ]}
+              accessible={true}
+              accessibilityLabel="Notification button"
+              accessibilityHint="Tap to view notifications"
+              accessibilityRole={AccessibilityRoles.BUTTON}
+            >
               <Ionicons
                 name="notifications-outline"
                 size={24}
-                color="#6B7280"
+                color="#007AFF"
               />
-              <View className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full" />
             </Pressable>
 
-            {/* Profile Icon */}
-            <Pressable>
-              <View className="w-8 h-8 bg-gray-300 dark:bg-gray-600 rounded-full items-center justify-center">
-                <Ionicons name="person-outline" size={20} color="#6B7280" />
-              </View>
-            </Pressable>
-
-            {/* Menu Icon */}
-            <Pressable>
-              <Ionicons name="menu-outline" size={24} color="#6B7280" />
-            </Pressable>
+            <Animated.View style={{ transform: [{ scale: profileScale }] }}>
+              <Pressable
+                style={[
+                  TouchTargetConfigs.button.icon,
+                  {
+                    backgroundColor: "#F2F2F7",
+                    borderRadius: 22,
+                  },
+                ]}
+                accessible={true}
+                accessibilityLabel="Profile button"
+                accessibilityHint="Tap to navigate to profile"
+                accessibilityRole={AccessibilityRoles.BUTTON}
+                onPress={handleProfilePress}
+              >
+                <Ionicons name="person-outline" size={24} color="#007AFF" />
+              </Pressable>
+            </Animated.View>
           </View>
         </View>
       </View>
 
-      {/* Main Content */}
-      <ScrollView
-        className="flex-1 px-4 pt-4"
-        contentContainerStyle={{
-          paddingBottom: 100, // Extra padding for tab bar
-          paddingTop: 8,
-        }}
-        showsVerticalScrollIndicator={false}
-      >
-        <Text className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-          Welcome back!
-        </Text>
-
-        {/* Membership Card Widget */}
-        <View className="mb-6">
+      <ScrollView style={{ flex: 1, paddingHorizontal: 20 }}>
+        {/* Membership Card */}
+        <Pressable
+          style={{
+            backgroundColor: "#FFFFFF",
+            borderRadius: 16,
+            padding: 20,
+            marginTop: 20,
+            marginBottom: 24,
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 8,
+            elevation: 4,
+            ...rtlStyles.layout.auto,
+          }}
+          accessible={true}
+          accessibilityLabel="Membership card with points and balance"
+          accessibilityHint="Double tap to view your digital card"
+          accessibilityRole={AccessibilityRoles.BUTTON}
+        >
           <LinearGradient
-            colors={["#667eea", "#764ba2"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            className="rounded-2xl p-6 shadow-lg"
+            colors={["#007AFF", "#0056CC"]}
+            style={{
+              borderRadius: 12,
+              padding: 16,
+              marginBottom: 16,
+            }}
           >
-            {/* Card Header */}
-            <View className="flex-row justify-between items-start mb-6">
-              <View>
-                <Text className="text-white/80 text-sm font-medium mb-1">
-                  MEMBER NAME
-                </Text>
-                <Text className="text-white text-xl font-bold">John Doe</Text>
-              </View>
-              <View className="bg-white/20 rounded-lg px-3 py-1">
-                <Text className="text-white text-xs font-semibold">GOLD</Text>
-              </View>
-            </View>
-
-            {/* Card Number */}
-            <View className="mb-6">
-              <Text className="text-white/80 text-sm font-medium mb-2">
-                CARD NUMBER
+            <View>
+              <Text
+                style={{
+                  color: "#FFFFFF",
+                  fontWeight: "600",
+                  ...FontScalingStyles.text.lg(),
+                  ...rtlStyles.text.auto,
+                  marginBottom: 4,
+                  textAlign: "left",
+                }}
+              >
+                Membership Card
               </Text>
-              <Text className="text-white text-lg font-mono tracking-wider">
+              <Text
+                style={{
+                  color: "#FFFFFF",
+                  opacity: 0.9,
+                  ...FontScalingStyles.text.sm(),
+                  ...rtlStyles.text.auto,
+                  marginBottom: 8,
+                  textAlign: "left",
+                }}
+              >
+                Member Name: John Doe
+              </Text>
+              <Text
+                style={{
+                  color: "#FFFFFF",
+                  opacity: 0.9,
+                  ...FontScalingStyles.text.xs(),
+                  ...rtlStyles.text.auto,
+                  marginBottom: 2,
+                  textAlign: "left",
+                }}
+              >
+                Card Number
+              </Text>
+              <Text
+                style={{
+                  color: "#FFFFFF",
+                  fontWeight: "bold",
+                  ...FontScalingStyles.text.lg(),
+                  ...rtlStyles.text.auto,
+                  textAlign: "left",
+                }}
+              >
                 **** **** **** 1234
               </Text>
             </View>
-
-            {/* Card Footer */}
-            <View className="flex-row justify-between items-end">
-              <View>
-                <Text className="text-white/80 text-sm font-medium mb-1">
-                  EXPIRES
-                </Text>
-                <Text className="text-white text-base font-semibold">
-                  12/25
-                </Text>
-              </View>
-
-              {/* Quick Access Buttons */}
-              <View className="flex-row space-x-3">
-                <Pressable className="bg-white/20 rounded-full p-2">
-                  <Ionicons name="qr-code-outline" size={20} color="white" />
-                </Pressable>
-                <Pressable className="bg-white/20 rounded-full p-2">
-                  <Ionicons name="card-outline" size={20} color="white" />
-                </Pressable>
-                <Pressable className="bg-white/20 rounded-full p-2">
-                  <Ionicons name="settings-outline" size={20} color="white" />
-                </Pressable>
-              </View>
-            </View>
           </LinearGradient>
-        </View>
 
-        {/* Points/Balance Widget */}
-        <View className="bg-white dark:bg-gray-800 rounded-2xl p-6 mb-6 shadow-sm">
-          {/* Header */}
-          <View className="flex-row justify-between items-center mb-6">
-            <Text className="text-lg font-bold text-gray-900 dark:text-white">
-              Your Rewards
-            </Text>
-            <Pressable className="bg-primary-100 dark:bg-primary-900 rounded-full px-3 py-1">
-              <Text className="text-primary-700 dark:text-primary-300 text-sm font-medium">
-                View History
+          <View
+            style={{
+              flexDirection: getFlexDirection("row"),
+              justifyContent: "space-between",
+              marginTop: 16,
+            }}
+          >
+            <Pressable
+              style={[
+                {
+                  backgroundColor: "#007AFF",
+                  borderRadius: 8,
+                  flex: 1,
+                  marginRight: 8,
+                  paddingVertical: 12,
+                  alignItems: "center",
+                },
+              ]}
+              accessible={true}
+              accessibilityLabel="View your digital card"
+              accessibilityRole={AccessibilityRoles.BUTTON}
+            >
+              <Text
+                style={{
+                  color: "#FFFFFF",
+                  fontWeight: "600",
+                  fontSize: 16,
+                  ...rtlStyles.text.center,
+                }}
+              >
+                Show Your Card
+              </Text>
+            </Pressable>
+
+            <Pressable
+              style={[
+                {
+                  backgroundColor: "#FFFFFF",
+                  borderRadius: 8,
+                  flex: 1,
+                  marginLeft: 8,
+                  borderWidth: 2,
+                  borderColor: "#007AFF",
+                  paddingVertical: 12,
+                  alignItems: "center",
+                },
+              ]}
+              accessible={true}
+              accessibilityLabel="Earn more points"
+              accessibilityRole={AccessibilityRoles.BUTTON}
+            >
+              <Text
+                style={{
+                  color: "#007AFF",
+                  fontWeight: "600",
+                  fontSize: 16,
+                  ...rtlStyles.text.center,
+                }}
+              >
+                Earn More
               </Text>
             </Pressable>
           </View>
+        </Pressable>
 
-          {/* Points Display */}
-          <View className="flex-row justify-between items-center mb-6">
-            <View>
-              <Text className="text-gray-600 dark:text-gray-400 text-sm font-medium mb-1">
-                Current Points
-              </Text>
-              <Text className="text-3xl font-bold text-gray-900 dark:text-white">
-                2,450
-              </Text>
-            </View>
-            <View className="items-end">
-              <Text className="text-gray-600 dark:text-gray-400 text-sm font-medium mb-1">
-                Balance
-              </Text>
-              <Text className="text-2xl font-bold text-green-600 dark:text-green-400">
-                $24.50
-              </Text>
-            </View>
-          </View>
+        {/* Points & Balance Widget */}
+        <View
+          style={{
+            backgroundColor: "#FFFFFF",
+            borderRadius: 16,
+            padding: 20,
+            marginBottom: 24,
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 8,
+            elevation: 4,
+            ...rtlStyles.layout.auto,
+          }}
+          accessible={true}
+          accessibilityLabel="Points and balance information"
+          accessibilityRole={AccessibilityRoles.SUMMARY}
+        >
+          <Text
+            style={{
+              fontWeight: "bold",
+              color: "#1A1A1A",
+              marginBottom: 12,
+              ...FontScalingStyles.text.xl(),
+              ...rtlStyles.text.auto,
+            }}
+          >
+            Your Points
+          </Text>
 
-          {/* Progress Bar */}
-          <View className="mb-6">
-            <View className="flex-row justify-between items-center mb-2">
-              <Text className="text-gray-600 dark:text-gray-400 text-sm">
-                Progress to Gold
+          <View style={{ marginBottom: 16 }}>
+            <View
+              style={{
+                flexDirection: getFlexDirection("row"),
+                justifyContent: "space-between",
+                marginBottom: 8,
+              }}
+            >
+              <Text
+                style={{
+                  color: "#687076",
+                  ...FontScalingStyles.text.sm(),
+                  ...rtlStyles.text.auto,
+                }}
+              >
+                Progress
               </Text>
-              <Text className="text-gray-600 dark:text-gray-400 text-sm">
-                2,450 / 5,000
+              <Text
+                style={{
+                  color: "#687076",
+                  ...FontScalingStyles.text.sm(),
+                  ...rtlStyles.text.auto,
+                }}
+              >
+                750 points to 1000
               </Text>
             </View>
-            <View className="h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+            <View
+              style={{
+                height: 8,
+                backgroundColor: "#F2F2F7",
+                borderRadius: 4,
+                overflow: "hidden",
+              }}
+              accessible={true}
+              accessibilityLabel="75% progress"
+              accessibilityRole={AccessibilityRoles.PROGRESSBAR}
+            >
               <View
-                className="h-full bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-full"
-                style={{ width: "49%" }}
+                style={{
+                  width: "75%",
+                  height: "100%",
+                  backgroundColor: "#34C759",
+                  borderRadius: 4,
+                }}
               />
             </View>
-            <Text className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              49% complete - 2,550 points to Gold level
-            </Text>
           </View>
 
-          {/* Quick Actions */}
-          <View className="flex-row space-x-3">
-            <Pressable className="flex-1 bg-primary-600 rounded-xl py-3 items-center">
-              <Ionicons name="add-circle-outline" size={20} color="white" />
-              <Text className="text-white font-semibold text-sm mt-1">
-                Earn Points
+          <View
+            style={{
+              flexDirection: getFlexDirection("row"),
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <View>
+              <Text
+                style={{
+                  fontWeight: "bold",
+                  color: "#1A1A1A",
+                  ...FontScalingStyles.text.xxl(),
+                  ...rtlStyles.text.auto,
+                }}
+              >
+                ৳2,450
               </Text>
-            </Pressable>
-            <Pressable className="flex-1 bg-green-600 rounded-xl py-3 items-center">
-              <Ionicons name="gift-outline" size={20} color="white" />
-              <Text className="text-white font-semibold text-sm mt-1">
-                Redeem
+              <Text
+                style={{
+                  color: "#687076",
+                  ...FontScalingStyles.text.sm(),
+                  ...rtlStyles.text.auto,
+                }}
+              >
+                Available Balance
+              </Text>
+            </View>
+            <Pressable
+              style={[
+                TouchTargetConfigs.button.primary,
+                {
+                  backgroundColor: "#007AFF",
+                  borderRadius: 8,
+                },
+              ]}
+              accessible={true}
+              accessibilityLabel="Redeem points"
+              accessibilityRole={AccessibilityRoles.BUTTON}
+            >
+              <Text
+                style={{
+                  color: "#FFFFFF",
+
+                  fontWeight: "600",
+                  ...FontScalingStyles.text.sm(),
+                  ...rtlStyles.text.center,
+                }}
+              >
+                Redeem Now
               </Text>
             </Pressable>
           </View>
         </View>
 
         {/* Search Bar */}
-        <View className="bg-white dark:bg-gray-800 rounded-2xl p-4 mb-6 shadow-sm">
-          <View className="flex-row items-center bg-gray-100 dark:bg-gray-700 rounded-xl px-4 py-3">
-            <Ionicons name="search-outline" size={20} color="#6B7280" />
+        <View
+          style={{
+            backgroundColor: "#FFFFFF",
+            borderRadius: 12,
+            paddingHorizontal: 16,
+            marginBottom: 24,
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 8,
+            elevation: 4,
+            ...rtlStyles.layout.auto,
+          }}
+        >
+          <View
+            style={{
+              flexDirection: getFlexDirection("row"),
+              alignItems: "center",
+            }}
+          >
+            <Ionicons
+              name="search"
+              size={20}
+              color="#687076"
+              style={{ marginRight: 12 }}
+            />
             <TextInput
-              placeholder="Search vendors, categories..."
-              placeholderTextColor="#9CA3AF"
-              className="flex-1 ml-3 text-gray-900 dark:text-white"
+              style={[
+                TouchTargetConfigs.input.search,
+                {
+                  flex: 1,
+
+                  color: "#1A1A1A",
+                  ...FontScalingStyles.text.base(),
+                  ...rtlStyles.text.auto,
+                },
+              ]}
+              placeholder="Search"
+              placeholderTextColor="#8E8E93"
+              accessible={true}
+              accessibilityLabel="Search input"
+              accessibilityHint="Type to search for categories or vendors"
+              accessibilityRole={AccessibilityRoles.SEARCH}
             />
           </View>
         </View>
 
-        {/* Category Grid */}
-        <View className="bg-white dark:bg-gray-800 rounded-2xl p-6 mb-6 shadow-sm">
-          <Text className="text-lg font-bold text-gray-900 dark:text-white mb-4">
-            Categories
-          </Text>
-          <View className="flex-row flex-wrap justify-between">
-            {categories.map((category) => (
-              <Pressable
-                key={category.id}
-                className="w-[30%] items-center mb-4"
-                onPress={() => handleCategoryPress(category.name)}
-              >
-                <View
-                  className="w-16 h-16 rounded-2xl items-center justify-center mb-2"
-                  style={{ backgroundColor: category.color + "20" }}
-                >
-                  <Ionicons
-                    name={category.icon as any}
-                    size={28}
-                    color={category.color}
-                  />
-                </View>
-                <Text className="text-xs text-gray-600 dark:text-gray-400 text-center font-medium">
-                  {category.name}
-                </Text>
-              </Pressable>
-            ))}
-          </View>
-        </View>
-
-        {/* Featured Vendors */}
-        <View className="bg-white dark:bg-gray-800 rounded-2xl p-6 mb-6 shadow-sm">
-          <View className="flex-row justify-between items-center mb-4">
-            <Text className="text-lg font-bold text-gray-900 dark:text-white">
-              Featured Vendors
+        {/* Popular Categories */}
+        <View style={{ marginBottom: 24 }}>
+          <View
+            style={{
+              flexDirection: getFlexDirection("row"),
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 16,
+            }}
+          >
+            <Text
+              style={{
+                fontWeight: "bold",
+                color: "#1A1A1A",
+                ...FontScalingStyles.text.xl(),
+                ...rtlStyles.text.auto,
+              }}
+            >
+              Popular Categories
             </Text>
-            <Pressable>
-              <Text className="text-primary-600 dark:text-primary-400 text-sm font-medium">
+            <Pressable
+              style={TouchTargetConfigs.button.small}
+              accessible={true}
+              accessibilityLabel="View all categories"
+              accessibilityRole={AccessibilityRoles.BUTTON}
+            >
+              <Text
+                style={{
+                  color: "#007AFF",
+
+                  fontWeight: "600",
+                  ...FontScalingStyles.text.sm(),
+                  ...rtlStyles.text.auto,
+                }}
+              >
                 View All
               </Text>
             </Pressable>
@@ -327,46 +705,198 @@ export default function HomeScreen() {
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
-            className="flex-row"
+            contentContainerStyle={{
+              padding: 8,
+            }}
           >
-            {featuredVendors.map((vendor) => (
+            {categories.map((category, idx) => (
               <Pressable
-                key={vendor.id}
-                className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 mr-4 w-40"
+                key={category.name}
+                style={{
+                  backgroundColor: "#FFFFFF",
+                  borderRadius: 12,
+                  paddingVertical: 20,
+                  paddingHorizontal: 16,
+                  marginRight: idx === categories.length - 1 ? 0 : 16,
+                  alignItems: "center",
+                  minWidth: 100,
+                  shadowColor: "#000",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.1,
+                  shadowRadius: 8,
+                  elevation: 4,
+                }}
+                onPress={() => handleCategoryPress(category.name)}
+                accessible={true}
+                accessibilityLabel={`${category.name} category card`}
+                accessibilityHint={`Double tap to view ${category.name} offers`}
+                accessibilityRole={AccessibilityRoles.BUTTON}
               >
-                <View className="items-center mb-3">
-                  <Text className="text-3xl mb-2">{vendor.image}</Text>
-                  <Text className="text-sm font-bold text-gray-900 dark:text-white text-center">
-                    {vendor.name}
-                  </Text>
-                  <Text className="text-xs text-gray-500 dark:text-gray-400 text-center">
-                    {vendor.category}
-                  </Text>
+                <View
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: 20,
+                    backgroundColor: category.color,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginBottom: 8,
+                  }}
+                  accessible={true}
+                  accessibilityLabel={`${category.name} category icon`}
+                  accessibilityRole={AccessibilityRoles.IMAGE}
+                >
+                  <Ionicons name={category.icon} size={24} color="#FFFFFF" />
                 </View>
-
-                <View className="flex-row items-center justify-between">
-                  <View className="flex-row items-center">
-                    <Ionicons name="star" size={12} color="#FBBF24" />
-                    <Text className="text-xs text-gray-600 dark:text-gray-400 ml-1">
-                      {vendor.rating}
-                    </Text>
-                  </View>
-                  <View className="bg-green-100 dark:bg-green-900 rounded-full px-2 py-1">
-                    <Text className="text-xs font-bold text-green-700 dark:text-green-300">
-                      {vendor.discount}
-                    </Text>
-                  </View>
-                </View>
+                <Text
+                  style={{
+                    color: "#1A1A1A",
+                    ...FontScalingStyles.text.xs(),
+                    ...rtlStyles.text.center,
+                  }}
+                >
+                  {category.name}
+                </Text>
               </Pressable>
             ))}
           </ScrollView>
         </View>
 
-        {/* Placeholder for promo banners */}
-        <View className="bg-white dark:bg-gray-800 rounded-lg p-4 mb-4">
-          <Text className="text-gray-600 dark:text-gray-300">
-            Promo banners will go here
-          </Text>
+        {/* Featured Vendors */}
+        <View style={{ marginBottom: 24 }}>
+          <View
+            style={{
+              flexDirection: getFlexDirection("row"),
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 16,
+            }}
+          >
+            <Text
+              style={{
+                fontWeight: "bold",
+                color: "#1A1A1A",
+                ...FontScalingStyles.text.xl(),
+                ...rtlStyles.text.auto,
+              }}
+            >
+              Featured Offers
+            </Text>
+            <Pressable
+              style={TouchTargetConfigs.button.small}
+              accessible={true}
+              accessibilityLabel="View all vendors"
+              accessibilityRole={AccessibilityRoles.BUTTON}
+            >
+              <Text
+                style={{
+                  color: "#007AFF",
+                  fontWeight: "600",
+                  ...FontScalingStyles.text.sm(),
+                  ...rtlStyles.text.auto,
+                }}
+              >
+                View All
+              </Text>
+            </Pressable>
+          </View>
+
+          <View
+            accessible={true}
+            accessibilityLabel="List of featured vendors and offers"
+            accessibilityRole={AccessibilityRoles.TEXT}
+          >
+            {featuredVendors.map((vendor) => (
+              <Pressable
+                key={vendor.name}
+                style={{
+                  backgroundColor: "#FFFFFF",
+                  borderRadius: 12,
+                  padding: 16,
+                  marginBottom: 12,
+                  flexDirection: getFlexDirection("row"),
+                  alignItems: "center",
+                  shadowColor: "#000",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.1,
+                  shadowRadius: 8,
+                  elevation: 4,
+                }}
+                onPress={() => handleVendorPress(vendor.name)}
+                accessible={true}
+                accessibilityLabel={`${vendor.name} vendor card`}
+                accessibilityHint={`Double tap to view ${vendor.name} offers`}
+                accessibilityRole={AccessibilityRoles.BUTTON}
+              >
+                <View
+                  style={{
+                    width: 60,
+                    height: 60,
+                    borderRadius: 8,
+                    backgroundColor: vendor.color,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginRight: 16,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#FFFFFF",
+                      fontWeight: "bold",
+                      ...FontScalingStyles.text.xxl(),
+                      ...rtlStyles.text.center,
+                    }}
+                  >
+                    {vendor.image}
+                  </Text>
+                </View>
+
+                <View style={{ flex: 1 }}>
+                  <Text
+                    style={{
+                      fontWeight: "600",
+                      color: "#1A1A1A",
+                      marginBottom: 4,
+                      ...FontScalingStyles.text.lg(),
+                      ...rtlStyles.text.auto,
+                    }}
+                  >
+                    {vendor.name}
+                  </Text>
+                  <Text
+                    style={{
+                      color: "#687076",
+                      marginBottom: 4,
+                      ...FontScalingStyles.text.sm(),
+                      ...rtlStyles.text.auto,
+                    }}
+                  >
+                    {vendor.category} • {vendor.distance}
+                  </Text>
+                  <View
+                    style={{
+                      flexDirection: getFlexDirection("row"),
+                      alignItems: "center",
+                    }}
+                  >
+                    <Ionicons name="star" size={16} color="#FFD700" />
+                    <Text
+                      style={{
+                        color: "#687076",
+                        marginLeft: 4,
+                        ...FontScalingStyles.text.sm(),
+                        ...rtlStyles.text.auto,
+                      }}
+                    >
+                      {vendor.rating} • {vendor.discount}
+                    </Text>
+                  </View>
+                </View>
+
+                <Ionicons name="chevron-forward" size={20} color="#C7C7CC" />
+              </Pressable>
+            ))}
+          </View>
         </View>
       </ScrollView>
     </View>

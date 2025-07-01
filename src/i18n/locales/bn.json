@@ -1,0 +1,54 @@
+{
+  "common": {
+    "appName": "থ্যাঙ্ক ইউ বিডি",
+    "language": "ভাষা",
+    "switchToLanguage": "{{language}} ভাষায় পরিবর্তন করুন"
+  },
+  "home": {
+    "welcome": "থ্যাঙ্ক ইউ বিডিতে স্বাগতম",
+    "featuredOffers": "বৈশিষ্ট্যযুক্ত অফার",
+    "viewAll": "সব দেখুন",
+    "categories": "বিভাগসমূহ"
+  },
+  "categories": {
+    "grocery": "মুদিখানা",
+    "electronics": "ইলেকট্রনিক্স",
+    "fashion": "ফ্যাশন",
+    "restaurants": "রেস্টুরেন্ট",
+    "beauty": "সৌন্দর্য",
+    "home": "বাড়ি",
+    "health": "স্বাস্থ্য",
+    "sports": "ক্রীড়া",
+    "books": "বই",
+    "automotive": "অটোমোটিভ",
+    "more": "আরও"
+  },
+  "card": {
+    "membership": "সদস্যপদ কার্ড",
+    "memberName": "সদস্যের নাম",
+    "cardNumber": "কার্ড নম্বর",
+    "showYourCard": "আপনার কার্ড দেখান"
+  },
+  "points": {
+    "yourPoints": "আপনার পয়েন্ট",
+    "earnMore": "আরও অর্জন করুন",
+    "balance": "ব্যালেন্স",
+    "totalEarned": "মোট অর্জিত"
+  },
+  "accessibility": {
+    "homeScreen": "বৈশিষ্ট্যযুক্ত অফার এবং বিভাগ সহ হোম স্ক্রিন",
+    "appLogo": "থ্যাঙ্ক ইউ বিডি অ্যাপ লোগো",
+    "membershipCard": "পয়েন্ট এবং ব্যালেন্স সহ সদস্যপদ কার্ড",
+    "membershipCardHint": "আপনার ডিজিটাল কার্ড দেখতে ডাবল ট্যাপ করুন",
+    "viewCardButton": "আপনার ডিজিটাল কার্ড দেখুন",
+    "earnMoreButton": "আরও পয়েন্ট অর্জন করুন",
+    "pointsBalanceWidget": "পয়েন্ট এবং ব্যালেন্স তথ্য",
+    "categoryCard": "{{title}} বিভাগ",
+    "categoryCardHint": "{{title}} অফার দেখতে ডাবল ট্যাপ করুন",
+    "categoryIcon": "{{category}} বিভাগ আইকন",
+    "featuredVendorsList": "বৈশিষ্ট্যযুক্ত বিক্রেতা এবং অফারের তালিকা",
+    "vendorCard": "{{title}} বিক্রেতা কার্ড",
+    "vendorCardHint": "{{title}} অফার দেখতে ডাবল ট্যাপ করুন",
+    "viewAllVendorsButton": "সব বিক্রেতা দেখুন"
+  }
+}

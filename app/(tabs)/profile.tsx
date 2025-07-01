@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { Image, Pressable, ScrollView, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function ProfileScreen() {
@@ -184,6 +184,62 @@ export default function ProfileScreen() {
               </View>
               <Ionicons name="chevron-forward" size={20} color="#6B7280" />
             </Pressable>
+          </View>
+        </View>
+
+        {/* My Membership */}
+        <View className="bg-white dark:bg-gray-800 rounded-2xl p-6 mb-6 shadow-sm">
+          <Text className="text-lg font-bold text-gray-900 dark:text-white mb-4">
+            My Membership
+          </Text>
+          {/* Card UI Inline */}
+          <View className="rounded-3xl p-6 shadow-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 mb-4">
+            {/* Card Header */}
+            <View className="flex-row items-center justify-between mb-4">
+              <Text className="text-lg font-bold text-gray-900 dark:text-white">
+                Thank You BD
+              </Text>
+              <Image
+                source={require("../../assets/images/adaptive-icon.png")}
+                style={{ width: 36, height: 36, borderRadius: 8 }}
+                resizeMode="contain"
+              />
+            </View>
+            {/* Member Name & Membership */}
+            <View className="flex-row items-center justify-between mb-2">
+              <Text className="text-xl font-bold text-gray-900 dark:text-white">
+                John Doe
+              </Text>
+              <View className="px-3 py-1 rounded-full bg-yellow-100 dark:bg-yellow-800">
+                <Text className="text-yellow-700 dark:text-yellow-200 font-semibold text-xs">
+                  Gold Membership
+                </Text>
+              </View>
+            </View>
+            {/* Card Number */}
+            <Text className="text-2xl font-mono font-bold tracking-widest text-gray-900 dark:text-white mb-4">
+              **** **** **** 1234
+            </Text>
+            {/* Expiry & QR */}
+            <View className="flex-row items-center justify-between mt-2">
+              <View>
+                <Text className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+                  Expires
+                </Text>
+                <Text className="text-base font-semibold text-gray-900 dark:text-white">
+                  12/25
+                </Text>
+              </View>
+              <View className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-xl items-center justify-center overflow-hidden">
+                <Image
+                  source={{
+                    uri: "https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=ThankYouBD-1234",
+                  }}
+                  style={{ width: 56, height: 56 }}
+                  resizeMode="contain"
+                />
+              </View>
+            </View>
           </View>
         </View>
 
